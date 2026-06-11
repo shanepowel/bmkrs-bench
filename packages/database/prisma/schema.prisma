@@ -196,6 +196,7 @@ model TalentProfile {
   studioNotes            String?       @db.Text
   referenceOne           String?
   referenceTwo           String?
+  applicationReadyAt     DateTime?
   stripeAccountId        String?  @unique
   stripeChargesEnabled   Boolean  @default(false)
   stripePayoutsEnabled   Boolean  @default(false)

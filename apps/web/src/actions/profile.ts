@@ -5,7 +5,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
+import { homeForRole } from "@/lib/bench";
 import { geocodeLocation } from "@/lib/geocode";
+import { routes } from "@/lib/routes";
 
 const baseSchema = z.object({
   firstName: z.string().min(1).max(50),
@@ -26,6 +28,9 @@ const talentSchema = baseSchema.extend({
   headline: z.string().max(120).optional(),
   bio: z.string().max(2000).optional(),
   hourlyRate: z.coerce.number().min(0).optional(),
+  dayRateBand: z.string().max(50).optional(),
+  referenceOne: z.string().max(200).optional(),
+  referenceTwo: z.string().max(200).optional(),
   availability: z.enum(["open", "limited", "unavailable"]).optional(),
   skillIds: z.array(z.string()).optional(),
 });
@@ -92,7 +97,7 @@ export async function updateProfile(formData: FormData): Promise<void> {
         },
       },
     });
-  } else {
+  } else if (user.role === UserRole.TALENT || user.role === UserRole.APPLICANT) {
     const skillIds = formData.getAll("skillIds").map(String);
     const parsed = talentSchema.safeParse({
       firstName: formData.get("firstName"),
@@ -103,6 +108,9 @@ export async function updateProfile(formData: FormData): Promise<void> {
       headline: formData.get("headline") || undefined,
       bio: formData.get("bio") || undefined,
       hourlyRate: formData.get("hourlyRate") || undefined,
+      dayRateBand: formData.get("dayRateBand") || undefined,
+      referenceOne: formData.get("referenceOne") || undefined,
+      referenceTwo: formData.get("referenceTwo") || undefined,
       availability: formData.get("availability") || "open",
       skillIds,
     });
@@ -121,12 +129,18 @@ export async function updateProfile(formData: FormData): Promise<void> {
         headline: d.headline,
         bio: d.bio,
         hourlyRate: d.hourlyRate,
+        dayRateBand: d.dayRateBand,
+        referenceOne: d.referenceOne,
+        referenceTwo: d.referenceTwo,
         availability: d.availability,
       },
       update: {
         headline: d.headline,
         bio: d.bio,
         hourlyRate: d.hourlyRate,
+        dayRateBand: d.dayRateBand,
+        referenceOne: d.referenceOne,
+        referenceTwo: d.referenceTwo,
         availability: d.availability,
       },
     });
@@ -158,10 +172,11 @@ export async function updateProfile(formData: FormData): Promise<void> {
     });
   }
 
-  revalidatePath("/profile");
+  revalidatePath(routes.profile);
+  revalidatePath(routes.application);
   revalidatePath(`/freelancers/${user.username}`);
   revalidatePath("/talents");
-  redirect("/dashboard");
+  redirect(homeForRole(user.role));
 }
 
 export async function getTalentByUsername(username: string) {

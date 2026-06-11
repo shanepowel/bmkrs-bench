@@ -94,6 +94,32 @@ async function main() {
   });
 
   await prisma.user.upsert({
+    where: { clerkId: "seed_applicant_1" },
+    create: {
+      clerkId: "seed_applicant_1",
+      email: "applicant@demo.bmkrs.com",
+      username: "jordan_apply",
+      firstName: "Jordan",
+      lastName: "Lee",
+      role: UserRole.APPLICANT,
+      talentProfile: {
+        create: {
+          headline: "Brand strategist · positioning and messaging",
+          bio: "Eight years helping product teams find the angle that makes them impossible to ignore.",
+          partnerStatus: PartnerStatus.APPLIED,
+          dayRateBand: "£450–550/day",
+          referenceOne: "Sam Patel · Acme · sam@acme.com",
+          referenceTwo: "Riley Chen · North · riley@north.co",
+          skills: {
+            create: [{ skillId: seoSkill.id }],
+          },
+        },
+      },
+    },
+    update: {},
+  });
+
+  await prisma.user.upsert({
     where: { clerkId: "seed_studio_1" },
     create: {
       clerkId: "seed_studio_1",

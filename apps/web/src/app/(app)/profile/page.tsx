@@ -15,14 +15,19 @@ export default async function ProfilePage() {
   const profile = await getProfileForEdit();
   if (!profile) redirect(routes.onboarding);
 
-  const skills = profile.role === UserRole.TALENT ? await listSkills() : [];
+  const isPartnerLike =
+    profile.role === UserRole.TALENT || profile.role === UserRole.APPLICANT;
+  const skills = isPartnerLike ? await listSkills() : [];
   const selectedSkillIds = profile.talentProfile?.skills.map((s) => s.skillId) ?? [];
 
   return (
     <PageShell
       title="Your profile"
       description={`@${profile.username}`}
-      back={{ href: routes.dashboard, label: "Dashboard" }}
+      back={{
+        href: profile.role === UserRole.APPLICANT ? routes.application : routes.dashboard,
+        label: profile.role === UserRole.APPLICANT ? "Application" : "Dashboard",
+      }}
       width="md"
     >
       <form action={updateProfile} className="space-y-4">
@@ -60,7 +65,7 @@ export default async function ProfilePage() {
           </>
         )}
 
-        {profile.role === UserRole.TALENT && profile.talentProfile && (
+        {isPartnerLike && profile.talentProfile && (
           <>
             <Field
               label="Headline"
@@ -69,11 +74,18 @@ export default async function ProfilePage() {
             />
             <Field label="Bio" name="bio" as="textarea" defaultValue={profile.talentProfile.bio ?? ""} />
             <Field
-              label="Hourly rate ($)"
-              name="hourlyRate"
-              type="number"
-              defaultValue={profile.talentProfile.hourlyRate?.toString() ?? ""}
+              label="Day rate band"
+              name="dayRateBand"
+              defaultValue={profile.talentProfile.dayRateBand ?? ""}
             />
+            {profile.role === UserRole.TALENT && (
+              <Field
+                label="Hourly rate ($)"
+                name="hourlyRate"
+                type="number"
+                defaultValue={profile.talentProfile.hourlyRate?.toString() ?? ""}
+              />
+            )}
             <Field label="Availability" name="availability" as="select" defaultValue={profile.talentProfile.availability ?? "open"}>
               <option value="open">Open</option>
               <option value="limited">Limited</option>
@@ -97,6 +109,13 @@ export default async function ProfilePage() {
             </a>
           </p>
         </>
+      )}
+      {profile.role === UserRole.APPLICANT && (
+        <p className="mt-6 text-center text-sm text-slate-500">
+          <a href={routes.application} className="font-medium text-blue-600 hover:underline">
+            Back to full application
+          </a>
+        </p>
       )}
     </PageShell>
   );

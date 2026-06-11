@@ -34,8 +34,8 @@ every change logged in `PartnerStatusEvent`. engagements write the inspectable t
 
 ## build phases
 
-1. **fork + strip + retheme + shells** — this repo
-2. partner profiles + pipeline workflow
+1. **fork + strip + retheme + shells** — shipped
+2. **partner profiles + pipeline workflow** — shipped: application form, status events, studio vetting ui
 3. bench search + briefs + availability responses
 4. client "your team" panels + project threads
 5. track records surfaced on profiles

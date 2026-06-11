@@ -8,6 +8,7 @@ export const routes = {
   client: "/client",
   studio: "/studio",
   studioPipeline: "/studio/pipeline",
+  studioPipelineApplicant: (id: string) => `/studio/pipeline/${id}`,
   studioBench: "/studio/bench",
   studioBriefs: "/studio/briefs",
 

@@ -2379,6 +2379,7 @@ export const TalentProfileScalarFieldEnum = {
   studioNotes: 'studioNotes',
   referenceOne: 'referenceOne',
   referenceTwo: 'referenceTwo',
+  applicationReadyAt: 'applicationReadyAt',
   stripeAccountId: 'stripeAccountId',
   stripeChargesEnabled: 'stripeChargesEnabled',
   stripePayoutsEnabled: 'stripePayoutsEnabled'

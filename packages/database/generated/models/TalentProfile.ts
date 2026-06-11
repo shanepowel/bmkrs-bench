@@ -47,6 +47,7 @@ export type TalentProfileMinAggregateOutputType = {
   studioNotes: string | null
   referenceOne: string | null
   referenceTwo: string | null
+  applicationReadyAt: Date | null
   stripeAccountId: string | null
   stripeChargesEnabled: boolean | null
   stripePayoutsEnabled: boolean | null
@@ -65,6 +66,7 @@ export type TalentProfileMaxAggregateOutputType = {
   studioNotes: string | null
   referenceOne: string | null
   referenceTwo: string | null
+  applicationReadyAt: Date | null
   stripeAccountId: string | null
   stripeChargesEnabled: boolean | null
   stripePayoutsEnabled: boolean | null
@@ -83,6 +85,7 @@ export type TalentProfileCountAggregateOutputType = {
   studioNotes: number
   referenceOne: number
   referenceTwo: number
+  applicationReadyAt: number
   stripeAccountId: number
   stripeChargesEnabled: number
   stripePayoutsEnabled: number
@@ -111,6 +114,7 @@ export type TalentProfileMinAggregateInputType = {
   studioNotes?: true
   referenceOne?: true
   referenceTwo?: true
+  applicationReadyAt?: true
   stripeAccountId?: true
   stripeChargesEnabled?: true
   stripePayoutsEnabled?: true
@@ -129,6 +133,7 @@ export type TalentProfileMaxAggregateInputType = {
   studioNotes?: true
   referenceOne?: true
   referenceTwo?: true
+  applicationReadyAt?: true
   stripeAccountId?: true
   stripeChargesEnabled?: true
   stripePayoutsEnabled?: true
@@ -147,6 +152,7 @@ export type TalentProfileCountAggregateInputType = {
   studioNotes?: true
   referenceOne?: true
   referenceTwo?: true
+  applicationReadyAt?: true
   stripeAccountId?: true
   stripeChargesEnabled?: true
   stripePayoutsEnabled?: true
@@ -252,6 +258,7 @@ export type TalentProfileGroupByOutputType = {
   studioNotes: string | null
   referenceOne: string | null
   referenceTwo: string | null
+  applicationReadyAt: Date | null
   stripeAccountId: string | null
   stripeChargesEnabled: boolean
   stripePayoutsEnabled: boolean
@@ -293,6 +300,7 @@ export type TalentProfileWhereInput = {
   studioNotes?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
   referenceOne?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
   referenceTwo?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
+  applicationReadyAt?: Prisma.DateTimeNullableFilter<"TalentProfile"> | Date | string | null
   stripeAccountId?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
   stripeChargesEnabled?: Prisma.BoolFilter<"TalentProfile"> | boolean
   stripePayoutsEnabled?: Prisma.BoolFilter<"TalentProfile"> | boolean
@@ -316,6 +324,7 @@ export type TalentProfileOrderByWithRelationInput = {
   studioNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceOne?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceTwo?: Prisma.SortOrderInput | Prisma.SortOrder
+  applicationReadyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeChargesEnabled?: Prisma.SortOrder
   stripePayoutsEnabled?: Prisma.SortOrder
@@ -343,6 +352,7 @@ export type TalentProfileWhereUniqueInput = Prisma.AtLeast<{
   studioNotes?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
   referenceOne?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
   referenceTwo?: Prisma.StringNullableFilter<"TalentProfile"> | string | null
+  applicationReadyAt?: Prisma.DateTimeNullableFilter<"TalentProfile"> | Date | string | null
   stripeChargesEnabled?: Prisma.BoolFilter<"TalentProfile"> | boolean
   stripePayoutsEnabled?: Prisma.BoolFilter<"TalentProfile"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -365,6 +375,7 @@ export type TalentProfileOrderByWithAggregationInput = {
   studioNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceOne?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceTwo?: Prisma.SortOrderInput | Prisma.SortOrder
+  applicationReadyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeChargesEnabled?: Prisma.SortOrder
   stripePayoutsEnabled?: Prisma.SortOrder
@@ -391,6 +402,7 @@ export type TalentProfileScalarWhereWithAggregatesInput = {
   studioNotes?: Prisma.StringNullableWithAggregatesFilter<"TalentProfile"> | string | null
   referenceOne?: Prisma.StringNullableWithAggregatesFilter<"TalentProfile"> | string | null
   referenceTwo?: Prisma.StringNullableWithAggregatesFilter<"TalentProfile"> | string | null
+  applicationReadyAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TalentProfile"> | Date | string | null
   stripeAccountId?: Prisma.StringNullableWithAggregatesFilter<"TalentProfile"> | string | null
   stripeChargesEnabled?: Prisma.BoolWithAggregatesFilter<"TalentProfile"> | boolean
   stripePayoutsEnabled?: Prisma.BoolWithAggregatesFilter<"TalentProfile"> | boolean
@@ -408,6 +420,7 @@ export type TalentProfileCreateInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -431,6 +444,7 @@ export type TalentProfileUncheckedCreateInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -452,6 +466,7 @@ export type TalentProfileUpdateInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -475,6 +490,7 @@ export type TalentProfileUncheckedUpdateInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -497,6 +513,7 @@ export type TalentProfileCreateManyInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -514,6 +531,7 @@ export type TalentProfileUpdateManyMutationInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -532,6 +550,7 @@ export type TalentProfileUncheckedUpdateManyInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -555,6 +574,7 @@ export type TalentProfileCountOrderByAggregateInput = {
   studioNotes?: Prisma.SortOrder
   referenceOne?: Prisma.SortOrder
   referenceTwo?: Prisma.SortOrder
+  applicationReadyAt?: Prisma.SortOrder
   stripeAccountId?: Prisma.SortOrder
   stripeChargesEnabled?: Prisma.SortOrder
   stripePayoutsEnabled?: Prisma.SortOrder
@@ -577,6 +597,7 @@ export type TalentProfileMaxOrderByAggregateInput = {
   studioNotes?: Prisma.SortOrder
   referenceOne?: Prisma.SortOrder
   referenceTwo?: Prisma.SortOrder
+  applicationReadyAt?: Prisma.SortOrder
   stripeAccountId?: Prisma.SortOrder
   stripeChargesEnabled?: Prisma.SortOrder
   stripePayoutsEnabled?: Prisma.SortOrder
@@ -595,6 +616,7 @@ export type TalentProfileMinOrderByAggregateInput = {
   studioNotes?: Prisma.SortOrder
   referenceOne?: Prisma.SortOrder
   referenceTwo?: Prisma.SortOrder
+  applicationReadyAt?: Prisma.SortOrder
   stripeAccountId?: Prisma.SortOrder
   stripeChargesEnabled?: Prisma.SortOrder
   stripePayoutsEnabled?: Prisma.SortOrder
@@ -651,6 +673,10 @@ export type NullableDecimalFieldUpdateOperationsInput = {
 
 export type EnumPartnerStatusFieldUpdateOperationsInput = {
   set?: $Enums.PartnerStatus
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type TalentProfileCreateNestedOneWithoutPortfolioItemsInput = {
@@ -721,6 +747,7 @@ export type TalentProfileCreateWithoutUserInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -742,6 +769,7 @@ export type TalentProfileUncheckedCreateWithoutUserInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -779,6 +807,7 @@ export type TalentProfileUpdateWithoutUserInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -800,6 +829,7 @@ export type TalentProfileUncheckedUpdateWithoutUserInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -821,6 +851,7 @@ export type TalentProfileCreateWithoutPortfolioItemsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -843,6 +874,7 @@ export type TalentProfileUncheckedCreateWithoutPortfolioItemsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -879,6 +911,7 @@ export type TalentProfileUpdateWithoutPortfolioItemsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -901,6 +934,7 @@ export type TalentProfileUncheckedUpdateWithoutPortfolioItemsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -921,6 +955,7 @@ export type TalentProfileCreateWithoutSkillsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -943,6 +978,7 @@ export type TalentProfileUncheckedCreateWithoutSkillsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -979,6 +1015,7 @@ export type TalentProfileUpdateWithoutSkillsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1001,6 +1038,7 @@ export type TalentProfileUncheckedUpdateWithoutSkillsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1021,6 +1059,7 @@ export type TalentProfileCreateWithoutStatusEventsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1043,6 +1082,7 @@ export type TalentProfileUncheckedCreateWithoutStatusEventsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1079,6 +1119,7 @@ export type TalentProfileUpdateWithoutStatusEventsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1101,6 +1142,7 @@ export type TalentProfileUncheckedUpdateWithoutStatusEventsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1121,6 +1163,7 @@ export type TalentProfileCreateWithoutEngagementsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1143,6 +1186,7 @@ export type TalentProfileUncheckedCreateWithoutEngagementsInput = {
   studioNotes?: string | null
   referenceOne?: string | null
   referenceTwo?: string | null
+  applicationReadyAt?: Date | string | null
   stripeAccountId?: string | null
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1179,6 +1223,7 @@ export type TalentProfileUpdateWithoutEngagementsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1201,6 +1246,7 @@ export type TalentProfileUncheckedUpdateWithoutEngagementsInput = {
   studioNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceOne?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceTwo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationReadyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   stripeAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeChargesEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripePayoutsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1280,6 +1326,7 @@ export type TalentProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   studioNotes?: boolean
   referenceOne?: boolean
   referenceTwo?: boolean
+  applicationReadyAt?: boolean
   stripeAccountId?: boolean
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1304,6 +1351,7 @@ export type TalentProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   studioNotes?: boolean
   referenceOne?: boolean
   referenceTwo?: boolean
+  applicationReadyAt?: boolean
   stripeAccountId?: boolean
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1323,6 +1371,7 @@ export type TalentProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   studioNotes?: boolean
   referenceOne?: boolean
   referenceTwo?: boolean
+  applicationReadyAt?: boolean
   stripeAccountId?: boolean
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
@@ -1342,12 +1391,13 @@ export type TalentProfileSelectScalar = {
   studioNotes?: boolean
   referenceOne?: boolean
   referenceTwo?: boolean
+  applicationReadyAt?: boolean
   stripeAccountId?: boolean
   stripeChargesEnabled?: boolean
   stripePayoutsEnabled?: boolean
 }
 
-export type TalentProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "hourlyRate" | "availability" | "verified" | "partnerStatus" | "dayRateBand" | "studioNotes" | "referenceOne" | "referenceTwo" | "stripeAccountId" | "stripeChargesEnabled" | "stripePayoutsEnabled", ExtArgs["result"]["talentProfile"]>
+export type TalentProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "hourlyRate" | "availability" | "verified" | "partnerStatus" | "dayRateBand" | "studioNotes" | "referenceOne" | "referenceTwo" | "applicationReadyAt" | "stripeAccountId" | "stripeChargesEnabled" | "stripePayoutsEnabled", ExtArgs["result"]["talentProfile"]>
 export type TalentProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.TalentProfile$skillsArgs<ExtArgs>
@@ -1385,6 +1435,7 @@ export type $TalentProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
     studioNotes: string | null
     referenceOne: string | null
     referenceTwo: string | null
+    applicationReadyAt: Date | null
     stripeAccountId: string | null
     stripeChargesEnabled: boolean
     stripePayoutsEnabled: boolean
@@ -1828,6 +1879,7 @@ export interface TalentProfileFieldRefs {
   readonly studioNotes: Prisma.FieldRef<"TalentProfile", 'String'>
   readonly referenceOne: Prisma.FieldRef<"TalentProfile", 'String'>
   readonly referenceTwo: Prisma.FieldRef<"TalentProfile", 'String'>
+  readonly applicationReadyAt: Prisma.FieldRef<"TalentProfile", 'DateTime'>
   readonly stripeAccountId: Prisma.FieldRef<"TalentProfile", 'String'>
   readonly stripeChargesEnabled: Prisma.FieldRef<"TalentProfile", 'Boolean'>
   readonly stripePayoutsEnabled: Prisma.FieldRef<"TalentProfile", 'Boolean'>

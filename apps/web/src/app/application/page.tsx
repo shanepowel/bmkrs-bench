@@ -1,47 +1,56 @@
-import Link from "next/link";
 import { PartnerStatus, UserRole } from "@bench/database";
-import { prisma } from "@bench/database";
+import { getApplicationForEdit } from "@/actions/application";
+import { ApplicationChecklist } from "@/components/application-checklist";
+import { ApplicationForm } from "@/components/application-form";
 import { BenchShell } from "@/components/bench-shell";
 import { Body, PartnerStatusLine } from "@/components/surfaces";
 import { requireRole } from "@/lib/auth";
 import { partnerStatusLabel } from "@/lib/bench";
-import { routes } from "@/lib/routes";
+import { getApplicationChecks } from "@/lib/application-completeness";
 
 export default async function ApplicationPage() {
-  const user = await requireRole(UserRole.APPLICANT);
-  const profile = await prisma.talentProfile.findUnique({
-    where: { userId: user.id },
-    include: {
-      statusEvents: { orderBy: { createdAt: "desc" }, take: 5 },
-    },
-  });
+  await requireRole(UserRole.APPLICANT);
+  const profile = await getApplicationForEdit();
+  if (!profile) return null;
 
-  const status = profile?.partnerStatus ?? PartnerStatus.APPLIED;
+  const talent = profile.talentProfile;
+  const status = talent?.partnerStatus ?? PartnerStatus.APPLIED;
+  const checks = getApplicationChecks(profile, talent);
 
   return (
     <BenchShell
       kicker="your application"
-      title="we are reviewing your bench application"
-      lead="you will see briefs and project threads here once you are trusted. for now, this page is your status."
+      title={
+        status === PartnerStatus.APPLIED
+          ? "tell us what you do. a human reads every application."
+          : "we are reviewing your bench application"
+      }
+      lead="portfolio, disciplines, rate band, two references. no unpaid spec work; we pay for trial briefs when we need to see you in action."
     >
-      <div className="col-span-12 sm:col-span-8">
-        <PartnerStatusLine status={partnerStatusLabel[status]} />
-        <Body className="mt-6">
-          complete your profile so the studio can review portfolio, disciplines, rate band, and references.
-        </Body>
-        <Link
-          href={routes.profile}
-          className="mt-8 inline-flex border border-[color:var(--surface-rule)] px-5 py-3 text-body text-[var(--surface-heading)] hover:border-[var(--surface-accent)]"
-        >
-          edit profile
-        </Link>
-        {profile?.statusEvents.length ? (
-          <div className="mt-10">
+      <div className="col-span-12 lg:col-span-4">
+        <PartnerStatusLine
+          status={partnerStatusLabel[status]}
+          since={
+            talent?.statusEvents[0]
+              ? undefined
+              : talent?.applicationReadyAt
+                ? talent.applicationReadyAt.toLocaleDateString("en-GB", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                : undefined
+          }
+        />
+        <div className="mt-6">
+          <ApplicationChecklist checks={checks} />
+        </div>
+        {talent?.statusEvents && talent.statusEvents.length > 0 && (
+          <div className="mt-8">
             <p className="font-mono text-meta uppercase tracking-[0.08em] text-[var(--surface-meta)]">
               status history
             </p>
             <ul className="mt-4 space-y-2">
-              {profile.statusEvents.map((event) => (
+              {talent.statusEvents.map((event) => (
                 <li key={event.id} className="font-mono text-meta text-[var(--surface-body)]">
                   {event.fromStatus ? `${partnerStatusLabel[event.fromStatus]} → ` : ""}
                   {partnerStatusLabel[event.toStatus]}
@@ -50,8 +59,25 @@ export default async function ApplicationPage() {
               ))}
             </ul>
           </div>
-        ) : null}
+        )}
+        {status !== PartnerStatus.APPLIED && (
+          <Body className="mt-8 text-[var(--surface-meta)]">
+            you will see briefs and project threads here once you are on the bench.
+          </Body>
+        )}
       </div>
+
+      <ApplicationForm
+        firstName={profile.firstName}
+        lastName={profile.lastName}
+        headline={talent?.headline}
+        bio={talent?.bio}
+        dayRateBand={talent?.dayRateBand}
+        referenceOne={talent?.referenceOne}
+        referenceTwo={talent?.referenceTwo}
+        selectedSkillIds={talent?.skills.map((s) => s.skillId) ?? []}
+        submittedAt={talent?.applicationReadyAt}
+      />
     </BenchShell>
   );
 }

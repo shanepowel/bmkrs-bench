@@ -988,10 +988,6 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type JobCreateNestedOneWithoutSkillsInput = {
   create?: Prisma.XOR<Prisma.JobCreateWithoutSkillsInput, Prisma.JobUncheckedCreateWithoutSkillsInput>
   connectOrCreate?: Prisma.JobCreateOrConnectWithoutSkillsInput

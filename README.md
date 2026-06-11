@@ -33,14 +33,22 @@ npm run dev   # http://localhost:3001
 
 rotate every key. never share a database with the public marketplace.
 
-## phase 1 (shipped in this fork)
+## phase 1 (shipped)
 
 - [x] fork + package rename (`@bench/database`)
 - [x] brand kit applied (surfaces, logos, ink login)
 - [x] middleware: no public marketplace (auth required except `/`, `/apply`, sign-in/up)
 - [x] schema: partner status, status events, projects, engagements, brief visibility
 - [x] four role shells: applicant, partner, client, studio
-- [x] marketplace routes retained for phase 2–3 (studio-gated or legacy links)
+- [x] marketplace routes retained for phase 3 (studio-gated or legacy links)
+
+## phase 2 (shipped)
+
+- [x] application form: disciplines, bio, rate band, references, portfolio links
+- [x] application checklist + `applicationReadyAt` on submit
+- [x] studio pipeline queue with applied/reviewed filters
+- [x] applicant detail: audit trail, private studio notes, promote actions
+- [x] status promotions write to `PartnerStatusEvent`; trusted promotes applicant → partner
 
 ## not deleted (retired in ui only for v1)
 
