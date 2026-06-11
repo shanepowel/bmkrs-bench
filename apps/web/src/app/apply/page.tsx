@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BenchEntryNav } from "@/components/bench-entry-nav";
 import {
   C,
   mono,
@@ -63,6 +64,7 @@ export default function ApplyPage() {
     return (
       <main style={{ background: C.paper, color: C.paperText }} className="min-h-dvh">
         <div className="mx-auto max-w-[640px] px-6 py-28">
+          <BenchEntryNav context="join" />
           <Kicker>application received</Kicker>
           <h1
             className="font-medium"
@@ -93,14 +95,8 @@ export default function ApplyPage() {
   return (
     <main style={{ background: C.paper, color: C.paperText }} className="min-h-dvh">
       <div className="mx-auto max-w-[720px] px-6 py-20">
-        <Link
-          href={routes.home}
-          style={{ ...mono, color: C.paperFaint }}
-          className="text-[12px] underline-offset-4 hover:underline"
-        >
-          ← the bench
-        </Link>
-        <div className="mt-10">
+        <BenchEntryNav context="join" />
+        <div className="mt-2">
           <Kicker>join the bench</Kicker>
           <h1
             className="font-medium"

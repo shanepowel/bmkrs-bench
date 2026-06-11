@@ -8,6 +8,7 @@ import { syncUserFromClerk } from "@/lib/auth";
 import { homeForRole } from "@/lib/bench";
 import { isDevAuthBypass } from "@/lib/env";
 import { geocodeLocation } from "@/lib/geocode";
+import { routes } from "@/lib/routes";
 
 const schema = z.object({
   role: z.enum(["client", "talent", "applicant"]),
@@ -58,7 +59,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
   }
 
   const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
+  if (!userId) redirect(routes.login);
 
   const taken = await prisma.user.findFirst({
     where: { username: data.username.toLowerCase(), NOT: { clerkId: userId } },

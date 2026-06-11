@@ -12,6 +12,8 @@ import { routes } from "@/lib/routes";
 const isPublicRoute = createRouteMatcher([
   "/",
   "/apply(.*)",
+  "/join(.*)",
+  "/hire",
   "/login(.*)",
   "/auth/callback(.*)",
   "/sign-in(.*)",
@@ -25,7 +27,9 @@ function benchDevMiddleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (
     pathname === routes.home ||
+    pathname === routes.hire ||
     pathname.startsWith("/apply") ||
+    pathname.startsWith("/join") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
     pathname.startsWith("/partners/") ||

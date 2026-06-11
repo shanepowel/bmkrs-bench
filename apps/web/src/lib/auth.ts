@@ -91,7 +91,7 @@ export async function requireUser() {
     );
   }
   const user = await getCurrentUser();
-  if (!user) redirect(routes.signIn);
+  if (!user) redirect(routes.login);
   return user;
 }
 

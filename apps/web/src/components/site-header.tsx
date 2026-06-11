@@ -87,13 +87,13 @@ export async function SiteHeader() {
             <>
               <Show when="signed-out">
                 <Link
-                  href={routes.signIn}
+                  href={routes.login}
                   className="font-mono text-meta uppercase tracking-[0.08em] text-[#D3D1C7] hover:text-[#F1EFE8]"
                 >
                   sign in
                 </Link>
                 <Link
-                  href={routes.apply}
+                  href={routes.join}
                   className="bg-[#FF4D00] px-4 py-2 font-mono text-meta uppercase tracking-[0.08em] text-[#181613]"
                 >
                   apply

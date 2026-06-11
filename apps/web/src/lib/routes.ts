@@ -5,7 +5,10 @@ export const routes = {
   login: "/login",
   dashboardHome: "/home",
   authCallback: "/auth/callback",
+  join: "/join",
   apply: "/apply",
+  /** Company entry from www /network — not the skill marketplace route. */
+  hire: "/hire",
   application: "/application",
   partner: "/partner",
   client: "/client",
@@ -24,7 +27,7 @@ export const routes = {
   talents: "/talents",
   categories: "/categories",
   category: (slug: string) => `/categories/${slug}`,
-  hire: (skillSlug: string) => `/hire/${skillSlug}`,
+  hireSkill: (skillSlug: string) => `/hire/${skillSlug}`,
   freelancer: (username: string) => `/freelancers/${username}`,
   partnerProfile: (username: string) => `/partners/${username}`,
 
@@ -38,7 +41,8 @@ export const routes = {
   transactions: "/settings/transactions",
   contract: (id: string) => `/contracts/${id}`,
   payouts: "/settings/payouts",
-  signIn: "/sign-in",
+  /** Canonical member login — marketing links here; `/sign-in` redirects here. */
+  signIn: "/login",
   signUp: (role?: "client" | "talent" | "applicant") =>
     role ? `/sign-up?role=${role}` : "/sign-up",
   onboarding: "/onboarding",

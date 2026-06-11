@@ -20,7 +20,7 @@ export default async function DashboardHomePage() {
   const user = await getCurrentUser();
 
   if (!benchSession && !user) {
-    redirect(isBenchDevAuth() ? routes.login : routes.signIn);
+    redirect(routes.login);
   }
 
   const role =

@@ -55,7 +55,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             {category.skills.map((skill) => (
               <Link
                 key={skill.id}
-                href={routes.hire(skill.slug)}
+                href={routes.hireSkill(skill.slug)}
                 className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700"
               >
                 {skill.name}

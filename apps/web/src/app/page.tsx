@@ -51,7 +51,7 @@ export default async function HomePage() {
     redirect(isBenchDevAuth() ? routes.dashboardHome : homeForRole(user.role));
   }
 
-  const signInHref = isBenchDevAuth() ? routes.login : routes.signIn;
+  const signInHref = routes.login;
 
   return (
     <main>
@@ -91,7 +91,14 @@ export default async function HomePage() {
             inventory.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-6">
-            <PrimaryButton href={routes.apply}>apply to the bench</PrimaryButton>
+            <PrimaryButton href={routes.join}>apply to the bench</PrimaryButton>
+            <Link
+              href={routes.hire}
+              style={{ ...mono, color: C.inkBody }}
+              className="text-[13px] underline underline-offset-4"
+            >
+              hire from the bench →
+            </Link>
             <span style={{ ...mono, color: C.inkFaint }} className="text-[12px]">
               ten minutes · a human reads it · you hear either way
             </span>

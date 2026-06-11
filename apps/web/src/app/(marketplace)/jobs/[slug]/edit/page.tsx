@@ -5,13 +5,14 @@ import { listCategories } from "@/actions/categories";
 import { getJobBySlug, updateJob, publishJob } from "@/actions/jobs";
 import { listSkills } from "@/actions/skills";
 import { getCurrentUser } from "@/lib/auth";
+import { routes } from "@/lib/routes";
 import { JobForm } from "@/components/job-form";
 import { Button } from "@/components/ui/button";
 
 export default async function EditJobPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const user = await getCurrentUser();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(routes.login);
 
   const job = await getJobBySlug(slug);
   if (!job || job.posterId !== user.id) notFound();

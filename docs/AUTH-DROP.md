@@ -2,7 +2,18 @@
 
 integrated from the bench-app auth code drop. clerk remains the production path when both keys are set.
 
-## dev sign-in (zero setup)
+## marketing deep links (www → app)
+
+when the bmkrs.com marketing site links into this app, these routes should exist and stay stable:
+
+| marketing URL (Sanity default) | app route | journey |
+|---|---|---|
+| `memberLoginUrl` → `/login` | `/login` | magic link or Clerk → `/home` |
+| `networkJoinUrl` → `/join` | `/join` | redirects to `/apply` → sign-up → `/application` |
+| `networkHireUrl` → `/hire` | `/hire` | company landing → www contact or `/login` |
+
+set `NEXT_PUBLIC_BMKRS_STUDIO_URL=https://www.bmkrs.com` so entry pages link back to `/network`.
+
 
 when clerk is not configured, or `AUTH_MODE=dev`:
 

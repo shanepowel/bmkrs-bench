@@ -90,7 +90,7 @@ export function TalentCard({
             {skills.slice(0, 4).map((ts) => (
               <Link
                 key={ts.skill.slug}
-                href={routes.hire(ts.skill.slug)}
+                href={routes.hireSkill(ts.skill.slug)}
                 className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700"
               >
                 {ts.skill.name}
