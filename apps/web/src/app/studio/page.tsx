@@ -1,48 +1,56 @@
 import Link from "next/link";
-import { BenchShell } from "@/components/bench-shell";
-import { Body } from "@/components/surfaces";
+import { BenchAppShell } from "@/components/bench-app-shell";
+import { C, mono } from "@/lib/bench-ui";
 import { requireStudio } from "@/lib/auth";
+import { navRailFooter, studioNavItems } from "@/lib/nav-rail";
 import { routes } from "@/lib/routes";
 
+const cards = [
+  {
+    href: routes.studioPipeline,
+    label: "pipeline",
+    copy: "applied → reviewed → trusted, with audit trail",
+  },
+  {
+    href: routes.studioBench,
+    label: "bench search",
+    copy: "discipline, availability, rate band",
+  },
+  {
+    href: routes.studioBriefs,
+    label: "briefs",
+    copy: "compose briefs and invite partners",
+  },
+] as const;
+
 export default async function StudioPage() {
-  await requireStudio();
+  const studio = await requireStudio();
 
   return (
-    <BenchShell
-      kicker="studio"
-      title="the bench"
+    <BenchAppShell
+      active={routes.studio}
+      footer={navRailFooter(studio.firstName, "studio")}
+      items={studioNavItems}
+      title="studio."
       lead="pipeline, search, briefs, assignments. one trusted network, staffed by a human."
     >
-      <div className="col-span-12 grid gap-6 sm:col-span-9 md:grid-cols-3">
-        {[
-          {
-            href: routes.studioPipeline,
-            label: "pipeline",
-            copy: "applied → reviewed → trusted, with audit trail",
-          },
-          {
-            href: routes.studioBench,
-            label: "bench search",
-            copy: "discipline, availability, rate band",
-          },
-          {
-            href: routes.studioBriefs,
-            label: "briefs",
-            copy: "compose briefs and invite partners",
-          },
-        ].map((card) => (
+      <div className="grid gap-0 md:grid-cols-3">
+        {cards.map((card) => (
           <Link
             key={card.href}
             href={card.href}
-            className="block border border-[color:var(--surface-rule)] p-6 transition hover:border-[var(--surface-accent)]"
+            className="block p-6 transition-transform hover:translate-x-1 motion-reduce:transform-none"
+            style={{ borderTop: `1px solid ${C.paperRule}` }}
           >
-            <p className="font-mono text-meta uppercase tracking-[0.08em] text-[var(--surface-meta)]">
+            <p style={{ ...mono, color: C.paperFaint }} className="text-[11px] uppercase tracking-[0.08em]">
               {card.label}
             </p>
-            <Body className="mt-3">{card.copy}</Body>
+            <p className="mt-3 text-[15px]" style={{ color: C.paperBody }}>
+              {card.copy}
+            </p>
           </Link>
         ))}
       </div>
-    </BenchShell>
+    </BenchAppShell>
   );
 }

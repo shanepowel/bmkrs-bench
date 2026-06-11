@@ -6,6 +6,7 @@ import { isClerkConfigured, isDevAuthBypass } from "@/lib/env-clerk";
 const isPublicRoute = createRouteMatcher([
   "/",
   "/apply(.*)",
+  "/login(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/health",

@@ -107,3 +107,22 @@ input:focus-visible {
   outline: 2px solid var(--color-orange);
   outline-offset: 2px;
 }
+
+.bench-ticker > div {
+  animation: bench-ticker 36s linear infinite;
+}
+
+@keyframes bench-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bench-ticker > div {
+    animation: none;
+  }
+}
