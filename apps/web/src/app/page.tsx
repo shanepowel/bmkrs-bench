@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { C, mono, Kicker, PrimaryButton } from "@/lib/bench-ui";
 import { getCurrentUser } from "@/lib/auth";
 import { homeForRole } from "@/lib/bench";
+import { isBenchDevAuth } from "@/lib/env";
 import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
@@ -46,7 +47,11 @@ const HOW = [
 
 export default async function HomePage() {
   const user = await getCurrentUser();
-  if (user) redirect(homeForRole(user.role));
+  if (user) {
+    redirect(isBenchDevAuth() ? routes.dashboardHome : homeForRole(user.role));
+  }
+
+  const signInHref = isBenchDevAuth() ? routes.login : routes.signIn;
 
   return (
     <main>
@@ -65,7 +70,7 @@ export default async function HomePage() {
               </span>
             </span>
             <Link
-              href={routes.signIn}
+              href={signInHref}
               style={{ ...mono, color: C.inkBody }}
               className="text-[13px] underline-offset-4 hover:underline"
             >
@@ -156,7 +161,7 @@ export default async function HomePage() {
             </p>
             <p style={{ ...mono, color: C.inkFaint }} className="text-[12px]">
               already on the bench?{" "}
-              <Link href={routes.signIn} style={{ color: C.inkBody }} className="underline underline-offset-4">
+              <Link href={signInHref} style={{ color: C.inkBody }} className="underline underline-offset-4">
                 sign in
               </Link>{" "}
               · client of the studio? your link is in your inbox · questions? hello@bmkrs.com

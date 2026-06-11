@@ -5,6 +5,7 @@ export {
   getClerkMissingKeys,
   getClerkPublishableKey,
   getClerkSecretKey,
+  isBenchDevAuth,
   isClerkConfigured,
   isDevAuthBypass,
 } from "@/lib/env-clerk";

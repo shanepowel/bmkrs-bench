@@ -78,3 +78,10 @@ export function getClerkDiagnostics() {
 export function isDevAuthBypass(): boolean {
   return process.env.DEV_AUTH_BYPASS === "true" && process.env.NODE_ENV !== "production";
 }
+
+/** Cookie-based bench login when Clerk is off, or AUTH_MODE=dev for local demos. */
+export function isBenchDevAuth(): boolean {
+  if (process.env.AUTH_MODE === "supabase") return false;
+  if (process.env.AUTH_MODE === "dev") return true;
+  return !isClerkConfigured();
+}

@@ -3,7 +3,34 @@ import { prisma, UserRole, type User } from "@bench/database";
 import { redirect } from "next/navigation";
 import { upsertUserFromClerk, type ClerkUserPayload } from "@/lib/clerk-sync";
 import { homeForRole, isStudio } from "@/lib/bench";
-import { isClerkConfigured, isDatabaseConfigured, isDevAuthBypass } from "@/lib/env";
+import {
+  getBenchSession,
+  type BenchRole,
+  type BenchSession,
+} from "@/lib/bench-session";
+import {
+  isBenchDevAuth,
+  isClerkConfigured,
+  isDatabaseConfigured,
+  isDevAuthBypass,
+} from "@/lib/env";
+import { routes } from "@/lib/routes";
+
+const DEV_CLERK_ID: Record<BenchRole, string> = {
+  studio: "seed_studio_1",
+  client: "seed_client_1",
+  partner: "seed_talent_1",
+};
+
+async function userForBenchSession(session: BenchSession): Promise<User | null> {
+  if (!isDatabaseConfigured()) return null;
+  try {
+    return await prisma.user.findUnique({ where: { clerkId: DEV_CLERK_ID[session.role] } });
+  } catch (error) {
+    console.error("[auth] bench session user lookup failed", error);
+    return null;
+  }
+}
 
 export async function getCurrentUser(): Promise<User | null> {
   if (!isDatabaseConfigured()) return null;
@@ -17,6 +44,12 @@ export async function getCurrentUser(): Promise<User | null> {
       console.error("[auth] dev bypass user lookup failed", error);
       return null;
     }
+  }
+
+  if (isBenchDevAuth()) {
+    const session = await getBenchSession();
+    if (!session) return null;
+    return userForBenchSession(session);
   }
 
   if (!isClerkConfigured()) return null;
@@ -35,11 +68,22 @@ export async function getCurrentUser(): Promise<User | null> {
   }
 }
 
+export async function getAuthSession(): Promise<BenchSession | null> {
+  if (!isBenchDevAuth()) return null;
+  return getBenchSession();
+}
+
 export async function requireUser() {
+  if (isBenchDevAuth()) {
+    const session = await getBenchSession();
+    if (!session) redirect(routes.login);
+    const user = await userForBenchSession(session);
+    if (!user) redirect(routes.login);
+    return user;
+  }
+
   if (!isClerkConfigured()) {
-    throw new Error(
-      "Authentication is not configured. Set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY on the server."
-    );
+    redirect(routes.login);
   }
   if (!isDatabaseConfigured()) {
     throw new Error(
@@ -47,7 +91,7 @@ export async function requireUser() {
     );
   }
   const user = await getCurrentUser();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(routes.signIn);
   return user;
 }
 
