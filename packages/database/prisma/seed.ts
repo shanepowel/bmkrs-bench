@@ -7,6 +7,7 @@ import {
   BillingMode,
   WorkEnvironment,
   ExperienceLevel,
+  BriefVisibility,
   ContractStatus,
   ProposalStatus,
 } from "../src/index.js";
@@ -119,7 +120,7 @@ async function main() {
     update: {},
   });
 
-  await prisma.user.upsert({
+  const studio = await prisma.user.upsert({
     where: { clerkId: "seed_studio_1" },
     create: {
       clerkId: "seed_studio_1",
@@ -219,6 +220,43 @@ async function main() {
     });
   }
 
+  const invitedBrief = await prisma.job.upsert({
+    where: { slug: "project-copper-motion-demo" },
+    create: {
+      slug: "project-copper-motion-demo",
+      posterId: studio.id,
+      title: "Project Copper",
+      description:
+        "Motion design for a product launch film. Two-week window, studio brief, invited partners only.",
+      status: JobStatus.OPEN,
+      visibility: BriefVisibility.INVITED,
+      billingMode: BillingMode.FIXED,
+      environment: WorkEnvironment.REMOTE,
+      experienceLevel: ExperienceLevel.EXPERT,
+      budgetMin: 4000,
+      budgetMax: 6000,
+      publishedAt: new Date(),
+      skills: { create: [{ skillId: reactSkill.id }] },
+    },
+    update: { visibility: BriefVisibility.INVITED, posterId: studio.id },
+  });
+
+  await prisma.proposal.upsert({
+    where: { jobId_talentId: { jobId: invitedBrief.id, talentId: talent.id } },
+    create: {
+      jobId: invitedBrief.id,
+      talentId: talent.id,
+      coverLetter: "awaiting your response",
+      bidAmount: 5000,
+      deliveryDays: 12,
+      status: ProposalStatus.SUBMITTED,
+    },
+    update: {
+      coverLetter: "awaiting your response",
+      status: ProposalStatus.SUBMITTED,
+    },
+  });
+
   const job = await prisma.job.findUnique({
     where: { slug: "rebuild-marketing-site-in-next-js-demo" },
   });
@@ -245,10 +283,27 @@ async function main() {
         talentId: talent.id,
         title: job.title,
         amount: 4500,
-        status: ContractStatus.COMPLETED,
-        startsAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        status: ContractStatus.ACTIVE,
+        startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       },
-      update: { status: ContractStatus.COMPLETED },
+      update: { status: ContractStatus.ACTIVE },
+    });
+
+    await prisma.messageThread.upsert({
+      where: { jobId_talentId: { jobId: job.id, talentId: talent.id } },
+      create: {
+        jobId: job.id,
+        clientId: client.id,
+        talentId: talent.id,
+        contractId: contract.id,
+        messages: {
+          create: {
+            senderId: talent.id,
+            body: "hero options v2 are in files — let me know what lands.",
+          },
+        },
+      },
+      update: { contractId: contract.id },
     });
 
     await prisma.review.upsert({

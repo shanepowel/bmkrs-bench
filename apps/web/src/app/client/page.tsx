@@ -1,18 +1,16 @@
 import Link from "next/link";
 import { UserRole } from "@bench/database";
+import { getClientTeam } from "@/actions/client-team";
 import { BenchAppShell } from "@/components/bench-app-shell";
+import { TeamPortrait, TeamPortraitMeta } from "@/components/team-portrait";
 import { C, mono, PrimaryButton } from "@/lib/bench-ui";
 import { requireRole } from "@/lib/auth";
 import { clientNavItems, navRailFooter } from "@/lib/nav-rail";
 import { routes } from "@/lib/routes";
 
-const PLACEHOLDER_TEAM = [
-  { name: "your studio lead", discipline: "account", note: "one line about who they are and what they own on your project." },
-  { name: "partner name", discipline: "brand + identity", note: "assigned when your project is staffed. no rates, no bench search." },
-] as const;
-
 export default async function ClientPage() {
   const user = await requireRole(UserRole.CLIENT);
+  const team = await getClientTeam();
 
   return (
     <BenchAppShell
@@ -21,40 +19,44 @@ export default async function ClientPage() {
       items={clientNavItems}
       title="your team."
       lead="see who is on your project, their discipline, and one line about them. no rates, no bench search, no studio notes."
-      action={<PrimaryButton href={routes.inbox}>project threads</PrimaryButton>}
+      action={<PrimaryButton href={routes.threads}>project threads</PrimaryButton>}
     >
       <div
-        className="grid grid-cols-[1.2fr_1fr_1.5fr] py-2 text-[11px]"
+        className="grid grid-cols-[auto_1.2fr_1fr_1.5fr] gap-4 py-2 text-[11px]"
         style={{ ...mono, color: C.paperFaint, borderTop: `1px solid ${C.paperRule}` }}
       >
+        <span />
         <span>name</span>
         <span>discipline</span>
         <span>about</span>
       </div>
 
-      {PLACEHOLDER_TEAM.map((member) => (
-        <div
-          key={member.name}
-          className="grid grid-cols-[1.2fr_1fr_1.5fr] items-start py-4"
-          style={{ borderTop: `1px solid ${C.paperRule}` }}
-        >
-          <span className="font-medium">{member.name}</span>
-          <span className="text-[12px]" style={{ ...mono, color: C.paperBody }}>
-            {member.discipline}
-          </span>
-          <span className="text-[14px]" style={{ color: C.paperFaint }}>
-            {member.note}
-          </span>
-        </div>
-      ))}
-
-      <p
-        className="mt-4 pt-3 text-[11px]"
-        style={{ ...mono, color: C.paperFaint, borderTop: `1px solid ${C.paperRule}` }}
-      >
-        phase 4: illustrated portraits and live team panels per project. threads and deliverables stay on
-        existing contract routes.
-      </p>
+      {team.length === 0 ? (
+        <p className="py-6 text-[15px]" style={{ color: C.paperFaint, borderTop: `1px solid ${C.paperRule}` }}>
+          your team appears here when the studio staffs your project. threads and deliverables stay on
+          existing contract routes.
+        </p>
+      ) : (
+        team.map((member) => (
+          <div
+            key={member.id}
+            className="grid grid-cols-[auto_1.2fr_1fr_1.5fr] items-start gap-4 py-4"
+            style={{ borderTop: `1px solid ${C.paperRule}` }}
+          >
+            <TeamPortrait name={member.name} avatarUrl={member.avatarUrl} />
+            <div>
+              <span className="font-medium">{member.name}</span>
+              <TeamPortraitMeta project={member.project} />
+            </div>
+            <span className="text-[12px]" style={{ ...mono, color: C.paperBody }}>
+              {member.discipline}
+            </span>
+            <span className="text-[14px]" style={{ color: C.paperFaint }}>
+              {member.note}
+            </span>
+          </div>
+        ))
+      )}
 
       <div className="mt-6">
         <Link

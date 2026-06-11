@@ -36,4 +36,13 @@ sign out via the link on `/home` (posts to `/api/logout`).
 
 set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` on vercel. clerk middleware protects routes; `/sign-in` replaces `/login`.
 
-future: `AUTH_MODE=supabase` with magic-link flow in `/api/login` and `/auth/callback`.
+## supabase mode (scaffold)
+
+set `AUTH_MODE=supabase` plus:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (server)
+- `APP_URL` (redirect target)
+
+`/api/login` and `/auth/callback` call `lib/supabase-auth.ts`. install `@supabase/ssr` and complete the marked TODOs (existence check + `signInWithOtp` + `exchangeCodeForSession`).

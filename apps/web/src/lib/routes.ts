@@ -28,8 +28,10 @@ export const routes = {
   freelancer: (username: string) => `/freelancers/${username}`,
 
   dashboard: "/dashboard",
-  inbox: "/inbox",
-  inboxThread: (threadId: string) => `/inbox/${threadId}`,
+  threads: "/threads",
+  threadsThread: (threadId: string) => `/threads/${threadId}`,
+  inbox: "/threads",
+  inboxThread: (threadId: string) => `/threads/${threadId}`,
   profile: "/profile",
   notifications: "/notifications",
   transactions: "/settings/transactions",

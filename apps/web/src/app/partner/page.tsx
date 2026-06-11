@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { UserRole } from "@bench/database";
+import { listPartnerBriefs } from "@/actions/briefs";
 import { BenchAppShell } from "@/components/bench-app-shell";
-import { C, mono, PrimaryButton, Status } from "@/lib/bench-ui";
+import { BriefResponseForm } from "@/components/brief-response-form";
+import { C, mono, PrimaryButton, Rule, Status } from "@/lib/bench-ui";
 import { getProfileForEdit } from "@/actions/profile";
 import { requireRole } from "@/lib/auth";
 import { partnerStatusLabel } from "@/lib/bench";
@@ -17,7 +19,7 @@ function availabilityKind(value: string | null | undefined): "available" | "book
 
 export default async function PartnerPage() {
   const user = await requireRole(UserRole.TALENT);
-  const profile = await getProfileForEdit();
+  const [profile, briefs] = await Promise.all([getProfileForEdit(), listPartnerBriefs()]);
   const status = profile?.talentProfile?.partnerStatus;
   const availability = profile?.talentProfile?.availability ?? "open";
   const availKind = availabilityKind(profile?.talentProfile?.availability);
@@ -42,7 +44,7 @@ export default async function PartnerPage() {
           </p>
           <div className="mt-6">
             <Link
-              href={routes.inbox}
+              href={routes.threads}
               className="inline-block rounded-full border px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.03] active:scale-[0.98] motion-reduce:transform-none"
               style={{ borderColor: "rgba(24,22,19,0.3)", color: C.paperText, background: "transparent" }}
             >
@@ -52,20 +54,30 @@ export default async function PartnerPage() {
         </div>
 
         <div className="mt-8 pt-8 lg:mt-0 lg:border-l lg:pt-0 lg:pl-8" style={{ borderColor: C.paperRule }}>
-          <p style={{ ...mono, color: C.paperFaint }} className="text-[11px] uppercase tracking-[0.08em]">
-            invited briefs
-          </p>
-          <p className="mt-4 max-w-[52ch] text-[15px]" style={{ color: C.paperFaint }}>
-            phase 3: yes/no/when responses for studio briefs you are invited to. marketplace job routes remain
-            wired underneath.
-          </p>
-          <Link
-            href={routes.jobs}
-            className="mt-4 inline-block text-[12px] hover:underline"
-            style={{ ...mono, color: C.orange }}
-          >
-            view briefs (legacy jobs route)
-          </Link>
+          <h2 className="mb-3 text-xl font-medium">your briefs</h2>
+          <Rule />
+          {briefs.length === 0 ? (
+            <p style={{ ...mono, color: C.paperFaint }} className="py-4 text-[12px]">
+              no open briefs right now. enjoy it; it never lasts.
+            </p>
+          ) : (
+            briefs.map((b) => (
+              <div
+                key={b.id}
+                className="grid grid-cols-1 items-center gap-2 py-4 sm:grid-cols-[1.2fr_1fr_1fr_auto]"
+                style={{ borderBottom: `1px solid ${C.paperRule}` }}
+              >
+                <span className="font-medium">{b.codename}</span>
+                <span style={{ ...mono, color: C.paperBody }} className="text-[12px]">
+                  {b.role} · {b.dates}
+                </span>
+                <span style={{ ...mono, color: C.paperFaint }} className="text-[12px]">
+                  respond by {b.respondBy}
+                </span>
+                <BriefResponseForm jobId={b.id} responded={b.responded} />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </BenchAppShell>
