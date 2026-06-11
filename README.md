@@ -24,14 +24,24 @@ npm run dev   # http://localhost:3001
 
 ## infrastructure
 
-| | FNM | bench |
+| | FNM marketplace | **bench (this repo)** |
 |---|---|---|
-| repo | freelancenearme | **bmkrs-bench** (create on github) |
-| database | neon (fnm) | **new** neon or postgres |
-| auth | clerk (fnm) | **new** clerk application |
-| deploy | freelancenearme.com | bench.bmkrs.com |
+| repo | [Freelance-Near-Me/freelancenearme.com](https://github.com/Freelance-Near-Me/freelancenearme.com) | **[shanepowel/bmkrs-bench](https://github.com/shanepowel/bmkrs-bench)** |
+| database | neon (fnm) | **separate** neon / postgres |
+| auth | clerk (fnm) | **separate** clerk application |
+| deploy | freelancenearme.com | **app.bmkrs.com** (Vercel: `main` on this repo) |
 
 rotate every key. never share a database with the public marketplace.
+
+## marketing entry routes (www → app)
+
+| route | journey |
+|---|---|
+| `/login` | member sign-in → `/home` |
+| `/join` | redirects to `/apply` → sign-up → `/application` |
+| `/hire` | company landing → www contact or `/login` |
+
+See [docs/AUTH-DROP.md](docs/AUTH-DROP.md) and [AGENTS.md](AGENTS.md).
 
 ## phase 1 (shipped)
 
