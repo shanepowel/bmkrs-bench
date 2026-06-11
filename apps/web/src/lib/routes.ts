@@ -26,6 +26,7 @@ export const routes = {
   category: (slug: string) => `/categories/${slug}`,
   hire: (skillSlug: string) => `/hire/${skillSlug}`,
   freelancer: (username: string) => `/freelancers/${username}`,
+  partnerProfile: (username: string) => `/partners/${username}`,
 
   dashboard: "/dashboard",
   threads: "/threads",

@@ -1,37 +1,35 @@
-/**
- * Supabase magic-link auth scaffold for AUTH_MODE=supabase.
- * Wire @supabase/ssr when the bench database moves off clerk + prisma.
- */
+import { prisma } from "@bench/database";
+import { benchRoleFromUserRole, createBenchSession } from "@/lib/bench-session";
+import { getSupabaseEnv, isSupabaseAuth, isSupabaseConfigured } from "@/lib/supabase/env";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export function isSupabaseAuth(): boolean {
-  return process.env.AUTH_MODE === "supabase";
-}
-
-export function getSupabaseEnv() {
-  return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL?.trim(),
-    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim(),
-    serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY?.trim(),
-    appUrl: process.env.APP_URL?.trim() ?? process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000",
-  };
-}
-
-export function isSupabaseConfigured(): boolean {
-  const { url, anonKey } = getSupabaseEnv();
-  return Boolean(url && anonKey);
-}
+export { getSupabaseEnv, isSupabaseAuth, isSupabaseConfigured };
 
 export async function sendMagicLink(email: string): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isSupabaseConfigured()) {
     return { ok: false, error: "supabase env not configured" };
   }
 
-  // TODO: createServerClient + auth.signInWithOtp after @supabase/ssr is added
-  // existence check against partners/clients tables before sending
-  void email;
-  return { ok: false, error: "supabase auth not wired yet" };
+  const normalized = email.toLowerCase().trim();
+  const benchUser = await prisma.user.findUnique({ where: { email: normalized } });
+  if (!benchUser) {
+    return { ok: false, error: "email not on the bench" };
+  }
+
+  const { appUrl } = getSupabaseEnv();
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.signInWithOtp({
+    email: normalized,
+    options: {
+      emailRedirectTo: `${appUrl}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true };
 }
 
 export async function exchangeAuthCode(code: string): Promise<{ ok: true } | { ok: false; error: string }> {
@@ -39,6 +37,18 @@ export async function exchangeAuthCode(code: string): Promise<{ ok: true } | { o
     return { ok: false, error: "supabase env not configured" };
   }
 
-  void code;
-  return { ok: false, error: "supabase callback not wired yet" };
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+  if (error || !data.user?.email) {
+    return { ok: false, error: error?.message ?? "no session" };
+  }
+
+  const benchUser = await prisma.user.findUnique({ where: { email: data.user.email.toLowerCase() } });
+  if (!benchUser) {
+    return { ok: false, error: "email not on the bench" };
+  }
+
+  const name = `${benchUser.firstName} ${benchUser.lastName}`.toLowerCase();
+  await createBenchSession(benchUser.email, benchRoleFromUserRole(benchUser.role), name);
+  return { ok: true };
 }

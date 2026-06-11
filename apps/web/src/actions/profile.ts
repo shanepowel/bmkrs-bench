@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
-import { homeForRole } from "@/lib/bench";
 import { geocodeLocation } from "@/lib/geocode";
 import { routes } from "@/lib/routes";
 
@@ -174,9 +173,32 @@ export async function updateProfile(formData: FormData): Promise<void> {
 
   revalidatePath(routes.profile);
   revalidatePath(routes.application);
-  revalidatePath(`/freelancers/${user.username}`);
+  revalidatePath(routes.partnerProfile(user.username));
+  revalidatePath(routes.partner);
+  revalidatePath(routes.dashboardHome);
   revalidatePath("/talents");
-  redirect(homeForRole(user.role));
+  redirect(routes.profile);
+}
+
+export async function updateAvailability(formData: FormData) {
+  const user = await requireUser();
+  if (user.role !== UserRole.TALENT) throw new Error("partners only");
+
+  const availability = String(formData.get("availability") ?? "");
+  if (!["open", "limited", "unavailable"].includes(availability)) {
+    throw new Error("invalid availability");
+  }
+
+  await prisma.talentProfile.upsert({
+    where: { userId: user.id },
+    create: { userId: user.id, availability },
+    update: { availability },
+  });
+
+  revalidatePath(routes.partner);
+  revalidatePath(routes.dashboardHome);
+  revalidatePath(routes.profile);
+  revalidatePath(routes.studioBench);
 }
 
 export async function getTalentByUsername(username: string) {
@@ -190,15 +212,8 @@ export async function getTalentByUsername(username: string) {
         include: {
           skills: { include: { skill: true } },
           portfolioItems: { orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }] },
+          engagements: { include: { project: true }, orderBy: { completedAt: "desc" } },
         },
-      },
-      reviewsReceived: {
-        include: {
-          reviewer: { select: { firstName: true, lastName: true, username: true } },
-          contract: { select: { title: true } },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 10,
       },
     },
   });

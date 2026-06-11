@@ -45,4 +45,10 @@ set `AUTH_MODE=supabase` plus:
 - `SUPABASE_SERVICE_ROLE_KEY` (server)
 - `APP_URL` (redirect target)
 
-`/api/login` and `/auth/callback` call `lib/supabase-auth.ts`. install `@supabase/ssr` and complete the marked TODOs (existence check + `signInWithOtp` + `exchangeCodeForSession`).
+`/api/login` and `/auth/callback` call `lib/supabase-auth.ts`:
+
+1. email must exist in the bench `User` table (no public sign-up via magic link)
+2. `signInWithOtp` sends the link
+3. `/auth/callback` exchanges the code, then sets the bench session cookie with the prisma user's role
+
+middleware treats `AUTH_MODE=supabase` like dev mode (bench cookie gate).

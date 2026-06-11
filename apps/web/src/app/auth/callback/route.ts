@@ -9,7 +9,9 @@ export async function GET(req: Request) {
   if (code && isSupabaseAuth()) {
     const result = await exchangeAuthCode(code);
     if (!result.ok) {
-      return NextResponse.redirect(new URL(routes.login, url.origin));
+      const login = new URL(routes.login, url.origin);
+      login.searchParams.set("error", result.error);
+      return NextResponse.redirect(login);
     }
   }
 

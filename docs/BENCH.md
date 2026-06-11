@@ -36,9 +36,9 @@ every change logged in `PartnerStatusEvent`. engagements write the inspectable t
 
 1. **fork + strip + retheme + shells** — shipped
 2. **partner profiles + pipeline workflow** — shipped: application form, status events, studio vetting ui
-3. bench search + briefs + availability responses
-4. client "your team" panels + project threads
-5. track records surfaced on profiles
+3. **bench search + briefs + availability responses** — shipped: studio brief composer, partner yes/no/when, availability toggle
+4. **client "your team" panels + project threads** — shipped: `/client`, `/threads`, live `/home` dashboards
+5. **track records surfaced on profiles** — shipped: `/profile`, `/partners/[username]`, engagement + contract history
 
 ## strategic
 

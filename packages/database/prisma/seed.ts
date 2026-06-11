@@ -137,6 +137,29 @@ async function main() {
     talent.talentProfile ??
     (await prisma.talentProfile.findUnique({ where: { userId: talent.id } }));
   if (talentProfile) {
+    const trustedAt = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000);
+    await prisma.partnerStatusEvent.deleteMany({ where: { talentProfileId: talentProfile.id } });
+    await prisma.partnerStatusEvent.createMany({
+      data: [
+        {
+          talentProfileId: talentProfile.id,
+          fromStatus: null,
+          toStatus: PartnerStatus.APPLIED,
+          byUserId: talent.id,
+          reason: "application submitted",
+          createdAt: new Date(trustedAt.getTime() - 60 * 24 * 60 * 60 * 1000),
+        },
+        {
+          talentProfileId: talentProfile.id,
+          fromStatus: PartnerStatus.APPLIED,
+          toStatus: PartnerStatus.TRUSTED,
+          byUserId: studio.id,
+          reason: "studio vetted — strong track record",
+          createdAt: trustedAt,
+        },
+      ],
+    });
+
     await prisma.portfolioItem.deleteMany({ where: { talentProfileId: talentProfile.id } });
     await prisma.portfolioItem.createMany({
       data: [
@@ -314,6 +337,83 @@ async function main() {
         revieweeId: talent.id,
         rating: 5,
         comment: "Excellent work. Delivered on time and communicated clearly throughout.",
+      },
+      update: {},
+    });
+
+  }
+
+  const pastJob = await prisma.job.upsert({
+    where: { slug: "acme-landing-pages-demo" },
+    create: {
+      slug: "acme-landing-pages-demo",
+      posterId: client.id,
+      title: "Acme landing pages",
+      description: "Shipped three campaign landing pages with analytics hooks.",
+      status: JobStatus.FILLED,
+      billingMode: BillingMode.FIXED,
+      environment: WorkEnvironment.REMOTE,
+      budgetMin: 2000,
+      budgetMax: 3500,
+      publishedAt: new Date(Date.now() - 150 * 24 * 60 * 60 * 1000),
+      skills: { create: [{ skillId: reactSkill.id }] },
+    },
+    update: { status: JobStatus.FILLED },
+  });
+
+  const pastProposal = await prisma.proposal.upsert({
+    where: { jobId_talentId: { jobId: pastJob.id, talentId: talent.id } },
+    create: {
+      jobId: pastJob.id,
+      talentId: talent.id,
+      coverLetter: "delivered all three pages on schedule.",
+      bidAmount: 2800,
+      deliveryDays: 18,
+      status: ProposalStatus.ACCEPTED,
+    },
+    update: { status: ProposalStatus.ACCEPTED },
+  });
+
+  await prisma.contract.upsert({
+    where: { proposalId: pastProposal.id },
+    create: {
+      jobId: pastJob.id,
+      proposalId: pastProposal.id,
+      clientId: client.id,
+      talentId: talent.id,
+      title: "Acme landing pages",
+      amount: 2800,
+      status: ContractStatus.COMPLETED,
+      startsAt: new Date(Date.now() - 140 * 24 * 60 * 60 * 1000),
+    },
+    update: { status: ContractStatus.COMPLETED },
+  });
+
+  const acmeProject = await prisma.project.upsert({
+    where: { slug: "acme-brand-refresh" },
+    create: {
+      slug: "acme-brand-refresh",
+      clientId: client.id,
+      name: "Acme brand refresh",
+      description: "positioning, site, and launch film for the 2026 rebrand",
+    },
+    update: {},
+  });
+
+  if (talentProfile) {
+    await prisma.engagement.upsert({
+      where: {
+        talentProfileId_projectId: {
+          talentProfileId: talentProfile.id,
+          projectId: acmeProject.id,
+        },
+      },
+      create: {
+        talentProfileId: talentProfile.id,
+        projectId: acmeProject.id,
+        role: "lead developer",
+        startedAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
       },
       update: {},
     });

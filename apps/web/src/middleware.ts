@@ -1,7 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse, type NextRequest, type NextFetchEvent } from "next/server";
 import { BENCH_SESSION_COOKIE } from "@/lib/bench-session";
-import { isBenchDevAuth, isClerkConfigured, isDevAuthBypass } from "@/lib/env-clerk";
+import {
+  isBenchDevAuth,
+  isClerkConfigured,
+  isDevAuthBypass,
+  isSupabaseBenchAuth,
+} from "@/lib/env-clerk";
 import { routes } from "@/lib/routes";
 
 const isPublicRoute = createRouteMatcher([
@@ -23,6 +28,7 @@ function benchDevMiddleware(req: NextRequest) {
     pathname.startsWith("/apply") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/partners/") ||
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
     pathname.includes(".")
@@ -43,7 +49,7 @@ const clerkHandler = isClerkConfigured()
   : null;
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
-  if (isBenchDevAuth()) return benchDevMiddleware(req);
+  if (isBenchDevAuth() || isSupabaseBenchAuth()) return benchDevMiddleware(req);
   if (clerkHandler) return clerkHandler(req, event);
   return benchDevMiddleware(req);
 }

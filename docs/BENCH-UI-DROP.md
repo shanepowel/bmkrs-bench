@@ -13,8 +13,8 @@ see also: [AUTH-DROP.md](./AUTH-DROP.md) for dev sign-in and `/home`.
 | `apply/page.tsx` | `src/app/apply/page.tsx` | intake form → sign-up applicant; draft in sessionStorage |
 | `login/page.tsx` | `src/app/login/page.tsx` | ink magic-link ui; dev mode signs in instantly via `/api/login` |
 | `bench/page.tsx` | `src/app/studio/bench/page.tsx` | studio bench table with live prisma data |
-| `home/page.tsx` | `src/app/home/page.tsx` | role-aware dashboard (partner briefs/projects, client projects, studio jump-off) |
-| `api/login`, `api/logout` | `src/app/api/login`, `src/app/api/logout` | dev cookie auth; supabase scaffold when `AUTH_MODE=supabase` |
+| `home/page.tsx` | `src/app/home/page.tsx` | role-aware dashboard with live briefs, projects, availability |
+| `api/login`, `api/logout` | `src/app/api/login`, `src/app/api/logout` | dev cookie auth; supabase otp when `AUTH_MODE=supabase` |
 | `api/apply` stub | not used | clerk + prisma handle applications |
 
 ## chrome
@@ -33,19 +33,33 @@ shared shell: `BenchAppShell` + `lib/nav-rail.ts` + `lib/nav-for-user.ts`.
 | brief composer | `/studio/briefs` |
 | bench search | `/studio/bench` |
 | partner home | `/partner` |
+| bench profile | `/profile` |
+| public partner profile | `/partners/[username]` |
 | client your-team | `/client` |
 | project threads | `/threads` |
 
-## phase 3–4 features — done (v1)
+## phase 3–5 — done (v1)
 
 | feature | implementation |
 |---|---|
-| brief responses | `actions/briefs.ts` + `BriefResponseForm` on `/partner` (i'm in / not this time / when) |
-| studio briefs list | `/studio/briefs` reads invited jobs from prisma |
-| client your-team | `/client` loads active contract talent with `TeamPortrait` initials |
+| brief responses | `actions/briefs.ts` + `BriefResponseForm` on `/partner` and `/home` |
+| studio brief composer | `/studio/briefs` + `BriefComposerForm` with trusted partner picker |
+| studio briefs list | invited jobs from prisma |
+| client your-team | `/client` loads active contract talent with `TeamPortrait` |
 | threads ui | `/threads` + `BenchMessagePanel`; `/inbox` redirects |
-| supabase auth mode | `lib/supabase-auth.ts` scaffold; wire `@supabase/ssr` when ready |
+| live dashboards | `actions/dashboard.ts` powers `/home` partner + client sections |
+| bench profile | `/profile` — headline, bio, rate band, skills, availability, portfolio |
+| public partner profile | `/partners/[username]` with track record + portfolio |
+| track records | `actions/track-record.ts` on profile + public partner page |
+| illustrated portraits | `TeamPortrait` svg avatars |
+| supabase auth mode | `@supabase/ssr` + `lib/supabase-auth.ts` — otp + callback |
+| payments ui retired | `/settings/payouts` and `/settings/transactions` show off-platform copy |
 
-## still on the roadmap
+## dev testing
 
-live brief invite picker in composer, illustrated portrait assets, supabase otp wiring, track records on profiles (phase 5).
+```bash
+npm run dev          # http://localhost:3001
+npm run db:seed      # seed users + briefs + track record demo data
+```
+
+sign in at `/login` with `partner@demo.bmkrs.com` (any email containing nothing special → partner seed user). edit profile at `/profile`, view public page at `/partners/sarah_dev`.

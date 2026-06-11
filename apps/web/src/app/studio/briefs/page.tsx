@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { JobStatus } from "@bench/database";
-import { listStudioBriefs } from "@/actions/briefs";
+import { listStudioBriefs, listTrustedPartnersForInvite } from "@/actions/briefs";
 import { BenchAppShell } from "@/components/bench-app-shell";
-import { C, Label, mono, PrimaryButton, Status, TextArea, TextField } from "@/lib/bench-ui";
+import { BriefComposerForm } from "@/components/brief-composer-form";
+import { C, mono, Status } from "@/lib/bench-ui";
 import { requireStudio } from "@/lib/auth";
 import { navRailFooter, studioNavItems } from "@/lib/nav-rail";
 import { routes } from "@/lib/routes";
 
 export default async function StudioBriefsPage() {
   const studio = await requireStudio();
-  const briefs = await listStudioBriefs();
+  const [briefs, partners] = await Promise.all([listStudioBriefs(), listTrustedPartnersForInvite()]);
+
+  const invitePartners = partners.map((p) => ({
+    userId: p.user.id,
+    name: `${p.user.firstName} ${p.user.lastName}`.toLowerCase(),
+    disciplines: p.skills.map((s) => s.skill.name.toLowerCase()),
+  }));
 
   return (
     <BenchAppShell
@@ -18,40 +25,8 @@ export default async function StudioBriefsPage() {
       items={studioNavItems}
       title="brief composer."
       lead="studio-authored, invited partners only. no open listings, no bidding."
-      action={<PrimaryButton href={routes.postJob}>publish brief</PrimaryButton>}
     >
-      <div className="max-w-2xl space-y-5">
-        <div>
-          <Label>project title</Label>
-          <TextField name="title" placeholder="q3 brand refresh" disabled />
-        </div>
-        <div>
-          <Label>brief</Label>
-          <TextArea
-            name="brief"
-            rows={6}
-            placeholder="what needs doing, by when, and what good looks like…"
-            disabled
-          />
-        </div>
-        <div>
-          <Label>invite partners</Label>
-          <p className="text-[14px]" style={{ color: C.paperFaint }}>
-            publish via post job, set visibility to invited, then add partner proposals from the job
-            page. partners respond with i&apos;m in / not this time / when.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-3 pt-2">
-          <PrimaryButton href={routes.postJob}>compose brief</PrimaryButton>
-          <Link
-            href={routes.jobs}
-            className="inline-block rounded-full border px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.03] active:scale-[0.98] motion-reduce:transform-none"
-            style={{ borderColor: "rgba(24,22,19,0.3)", color: C.paperText, background: "transparent" }}
-          >
-            all briefs
-          </Link>
-        </div>
-      </div>
+      <BriefComposerForm partners={invitePartners} />
 
       <section className="mt-12">
         <h2 className="mb-3 text-xl font-medium">published briefs</h2>

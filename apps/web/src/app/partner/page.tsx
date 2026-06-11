@@ -3,6 +3,7 @@ import { UserRole } from "@bench/database";
 import { listPartnerBriefs } from "@/actions/briefs";
 import { BenchAppShell } from "@/components/bench-app-shell";
 import { BriefResponseForm } from "@/components/brief-response-form";
+import { AvailabilityToggle } from "@/components/availability-toggle";
 import { C, mono, PrimaryButton, Rule, Status } from "@/lib/bench-ui";
 import { getProfileForEdit } from "@/actions/profile";
 import { requireRole } from "@/lib/auth";
@@ -11,18 +12,10 @@ import { navRailFooter, partnerNavItems } from "@/lib/nav-rail";
 import { partnerStatusKind } from "@/lib/partner-status-ui";
 import { routes } from "@/lib/routes";
 
-function availabilityKind(value: string | null | undefined): "available" | "booked" | "away" {
-  if (value === "unavailable") return "away";
-  if (value === "limited") return "booked";
-  return "available";
-}
-
 export default async function PartnerPage() {
   const user = await requireRole(UserRole.TALENT);
   const [profile, briefs] = await Promise.all([getProfileForEdit(), listPartnerBriefs()]);
   const status = profile?.talentProfile?.partnerStatus;
-  const availability = profile?.talentProfile?.availability ?? "open";
-  const availKind = availabilityKind(profile?.talentProfile?.availability);
 
   return (
     <BenchAppShell
@@ -31,18 +24,20 @@ export default async function PartnerPage() {
       items={partnerNavItems}
       title="partner home."
       lead="update availability, respond to briefs, and keep project threads current."
-      action={<PrimaryButton href={routes.profile}>edit profile</PrimaryButton>}
+      action={<PrimaryButton href={routes.threads}>threads</PrimaryButton>}
     >
       <div className="grid gap-0 lg:grid-cols-2">
         <div className="p-0 pr-0 lg:pr-8">
           {status && (
             <Status kind={partnerStatusKind(status)}>{partnerStatusLabel[status]}</Status>
           )}
-          <p className="mt-4 text-[15px]" style={{ color: C.paperBody }}>
-            availability:{" "}
-            <Status kind={availKind}>{availability}</Status>
-          </p>
           <div className="mt-6">
+            <AvailabilityToggle current={profile?.talentProfile?.availability ?? "open"} />
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <PrimaryButton href={routes.profile}>edit bench profile</PrimaryButton>
+          </div>
+          <div className="mt-4">
             <Link
               href={routes.threads}
               className="inline-block rounded-full border px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.03] active:scale-[0.98] motion-reduce:transform-none"
