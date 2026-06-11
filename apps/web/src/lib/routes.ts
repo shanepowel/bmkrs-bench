@@ -1,0 +1,38 @@
+/** Central route helpers — bench portal URLs. */
+
+export const routes = {
+  home: "/",
+  apply: "/apply",
+  application: "/application",
+  partner: "/partner",
+  client: "/client",
+  studio: "/studio",
+  studioPipeline: "/studio/pipeline",
+  studioBench: "/studio/bench",
+  studioBriefs: "/studio/briefs",
+
+  // retained marketplace mechanics (studio-only or role-gated)
+  jobs: "/jobs",
+  job: (slug: string) => `/jobs/${slug}`,
+  jobEdit: (slug: string) => `/jobs/${slug}/edit`,
+  jobMessages: (slug: string, participantId: string) => `/jobs/${slug}/messages/${participantId}`,
+  postJob: "/jobs/post",
+  talents: "/talents",
+  categories: "/categories",
+  category: (slug: string) => `/categories/${slug}`,
+  hire: (skillSlug: string) => `/hire/${skillSlug}`,
+  freelancer: (username: string) => `/freelancers/${username}`,
+
+  dashboard: "/dashboard",
+  inbox: "/inbox",
+  inboxThread: (threadId: string) => `/inbox/${threadId}`,
+  profile: "/profile",
+  notifications: "/notifications",
+  transactions: "/settings/transactions",
+  contract: (id: string) => `/contracts/${id}`,
+  payouts: "/settings/payouts",
+  signIn: "/sign-in",
+  signUp: (role?: "client" | "talent" | "applicant") =>
+    role ? `/sign-up?role=${role}` : "/sign-up",
+  onboarding: "/onboarding",
+} as const;

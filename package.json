@@ -1,0 +1,34 @@
+{
+  "name": "bmkrs-bench",
+  "private": true,
+  "version": "0.1.0",
+  "description": "bmkrs trusted partner portal — the bench",
+  "workspaces": [
+    "apps/web",
+    "packages/database"
+  ],
+  "scripts": {
+    "postinstall": "npm run db:generate",
+    "dev": "npm run dev -w bench-web",
+    "build": "npm run build -w bench-web",
+    "db:generate": "npm run db:generate -w @bench/database",
+    "db:push": "npm run db:push -w @bench/database",
+    "db:migrate": "npm run db:migrate -w @bench/database",
+    "db:migrate:deploy": "npm run db:migrate:deploy -w @bench/database",
+    "db:seed": "npm run db:seed -w @bench/database",
+    "db:studio": "npm run db:studio -w @bench/database",
+    "setup:dev": "bash scripts/setup-dev.sh",
+    "env:example": "cp -n apps/web/.env.example apps/web/.env 2>/dev/null || cp apps/web/.env.example apps/web/.env; grep '^DATABASE_URL=' apps/web/.env | head -1 > packages/database/.env; echo 'Wrote apps/web/.env and packages/database/.env'"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "overrides": {
+    "postcss": "8.5.15",
+    "next": {
+      ".": "16.2.7",
+      "postcss": "8.5.15"
+    },
+    "undici": "6.26.0"
+  }
+}

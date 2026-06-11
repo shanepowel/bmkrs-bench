@@ -1,0 +1,109 @@
+@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-fragment), ui-monospace, monospace;
+
+  --color-ink: #181613;
+  --color-paper: #f1efe8;
+  --color-orange: #ff4d00;
+
+  --text-hero: clamp(3rem, 8vw, 8.75rem);
+  --text-h2: clamp(2.25rem, 4.5vw, 4rem);
+  --text-h3: clamp(1.5rem, 2.5vw, 2rem);
+  --text-body-lg: clamp(1.125rem, 1.4vw, 1.375rem);
+  --text-body: 1.125rem;
+  --text-meta: 0.8125rem;
+
+  --space-section: clamp(5rem, 10vw, 10rem);
+  --space-block: clamp(2.5rem, 5vw, 5rem);
+  --space-tight: 1.25rem;
+
+  --max-width-grid: 90rem;
+  --spacing-gutter: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --text-body: 1rem;
+  }
+}
+
+.text-hero {
+  font-size: var(--text-hero);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+.text-h2 {
+  font-size: var(--text-h2);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.text-h3 {
+  font-size: var(--text-h3);
+  line-height: 1.15;
+}
+
+.text-body-lg {
+  font-size: var(--text-body-lg);
+  line-height: 1.5;
+}
+
+.text-body {
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+
+.text-meta {
+  font-size: var(--text-meta);
+  line-height: 1.4;
+}
+
+.max-w-grid {
+  max-width: var(--max-width-grid);
+}
+
+.gap-gutter {
+  gap: var(--spacing-gutter);
+}
+
+.px-gutter {
+  padding-left: var(--spacing-gutter);
+  padding-right: var(--spacing-gutter);
+}
+
+.py-section {
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
+}
+
+.mb-block {
+  margin-bottom: var(--space-block);
+}
+
+.mb-tight {
+  margin-bottom: var(--space-tight);
+}
+
+.mt-tight {
+  margin-top: var(--space-tight);
+}
+
+body {
+  @apply bg-ink font-sans text-paper antialiased;
+}
+
+::selection {
+  background: rgba(255, 77, 0, 0.35);
+  color: #f1efe8;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}

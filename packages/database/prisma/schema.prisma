@@ -1,0 +1,581 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  APPLICANT
+  CLIENT
+  TALENT
+  ADMIN
+}
+
+enum PartnerStatus {
+  APPLIED
+  REVIEWED
+  TRUSTED
+  CORE
+}
+
+enum BriefVisibility {
+  DRAFT
+  INVITED
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  FILLED
+  CLOSED
+  CANCELLED
+}
+
+enum BillingMode {
+  FIXED
+  HOURLY
+}
+
+enum WorkEnvironment {
+  REMOTE
+  ONSITE
+  HYBRID
+}
+
+enum ExperienceLevel {
+  ENTRY
+  INTERMEDIATE
+  EXPERT
+}
+
+enum ProposalStatus {
+  SUBMITTED
+  SHORTLISTED
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+}
+
+enum ContractStatus {
+  PENDING_ACCEPTANCE
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum MilestoneStatus {
+  PENDING
+  FUNDED
+  SUBMITTED
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+enum ActivityType {
+  CONTRACT_OFFERED
+  CONTRACT_ACCEPTED
+  MILESTONE_CREATED
+  MILESTONE_FUNDED
+  MILESTONE_SUBMITTED
+  MILESTONE_APPROVED
+  MILESTONE_PAID
+  DELIVERABLE_UPLOADED
+  MESSAGE_SENT
+}
+
+enum NotificationType {
+  PROPOSAL
+  OFFER
+  CONTRACT
+  MILESTONE
+  DELIVERABLE
+  MESSAGE
+  REVIEW
+  SYSTEM
+}
+
+enum PaymentTransactionType {
+  FUND
+  RELEASE
+  REFUND
+}
+
+enum PaymentTransactionStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  username  String   @unique
+  firstName String
+  lastName  String
+  role      UserRole
+  avatarUrl          String?
+  country            String?
+  city               String?
+  postcode           String?
+  latitude           Float?
+  longitude          Float?
+  stripeCustomerId   String?  @unique
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  clientProfile       ClientProfile?
+  talentProfile       TalentProfile?
+  jobsPosted          Job[]                 @relation("JobPoster")
+  proposals           Proposal[]
+  contractsAsClient   Contract[]            @relation("ContractClient")
+  contractsAsTalent   Contract[]            @relation("ContractTalent")
+  messagesSent        Message[]
+  deliverables        Deliverable[]
+  activities          ContractActivity[]
+  notifications       Notification[]
+  reviewsGiven        Review[]              @relation("ReviewsGiven")
+  reviewsReceived     Review[]              @relation("ReviewsReceived")
+  threadReads         ThreadRead[]
+  savedSearches       SavedSearch[]
+  paymentsAsPayer     PaymentTransaction[]  @relation("PaymentsPayer")
+  paymentsAsPayee     PaymentTransaction[]  @relation("PaymentsPayee")
+  projectsAsClient    Project[]             @relation("ClientProjects")
+  partnerStatusEvents PartnerStatusEvent[]  @relation("StatusEventActor")
+
+  @@index([role])
+  @@index([latitude, longitude])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  isLocal     Boolean  @default(false)
+  parentId    String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryTree")
+  jobs            Job[]
+  skills          Skill[]
+  waitlistEntries WaitlistEntry[]
+
+  @@index([parentId])
+}
+
+model ClientProfile {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  companyName String?
+  companySize String?
+  website     String?
+  bio         String? @db.Text
+  verified    Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TalentProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  headline     String?
+  bio          String?  @db.Text
+  hourlyRate   Decimal? @db.Decimal(10, 2)
+  availability           String?  @default("open")
+  verified               Boolean  @default(false)
+  partnerStatus          PartnerStatus @default(APPLIED)
+  dayRateBand            String?
+  studioNotes            String?       @db.Text
+  referenceOne           String?
+  referenceTwo           String?
+  stripeAccountId        String?  @unique
+  stripeChargesEnabled   Boolean  @default(false)
+  stripePayoutsEnabled   Boolean  @default(false)
+
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills          TalentSkill[]
+  portfolioItems  PortfolioItem[]
+  statusEvents    PartnerStatusEvent[]
+  engagements     Engagement[]
+
+  @@index([partnerStatus])
+}
+
+model PortfolioItem {
+  id              String   @id @default(cuid())
+  talentProfileId String
+  title           String
+  description     String?  @db.Text
+  imageUrl        String?
+  projectUrl      String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  talentProfile TalentProfile @relation(fields: [talentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([talentProfileId, sortOrder])
+}
+
+model Skill {
+  id         String   @id @default(cuid())
+  name       String
+  slug       String   @unique
+  categoryId String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  category     Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  jobs         JobSkill[]
+  talentSkills TalentSkill[]
+
+  @@index([categoryId])
+}
+
+model TalentSkill {
+  talentProfileId String
+  skillId         String
+
+  talentProfile TalentProfile @relation(fields: [talentProfileId], references: [id], onDelete: Cascade)
+  skill         Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([talentProfileId, skillId])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  clientId    String
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  client      User         @relation("ClientProjects", fields: [clientId], references: [id], onDelete: Cascade)
+  briefs      Job[]
+  engagements Engagement[]
+
+  @@index([clientId])
+}
+
+model Job {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  posterId        String
+  projectId       String?
+  title           String
+  description     String          @db.Text
+  status          JobStatus       @default(DRAFT)
+  visibility      BriefVisibility @default(INVITED)
+  billingMode     BillingMode     @default(FIXED)
+  environment     WorkEnvironment @default(REMOTE)
+  experienceLevel ExperienceLevel @default(INTERMEDIATE)
+  budgetMin       Decimal         @db.Decimal(12, 2)
+  budgetMax       Decimal         @db.Decimal(12, 2)
+  country         String?
+  city            String?
+  postcode        String?
+  latitude        Float?
+  longitude       Float?
+  categoryId      String?
+  featured        Boolean         @default(false)
+  urgent          Boolean         @default(false)
+  publishedAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  poster    User       @relation("JobPoster", fields: [posterId], references: [id], onDelete: Cascade)
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  category  Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  skills    JobSkill[]
+  proposals Proposal[]
+  contracts Contract[]
+  messageThreads MessageThread[]
+
+  @@index([status, publishedAt])
+  @@index([posterId])
+  @@index([projectId])
+  @@index([categoryId])
+  @@index([latitude, longitude])
+  @@index([visibility])
+}
+
+model PartnerStatusEvent {
+  id              String         @id @default(cuid())
+  talentProfileId String
+  fromStatus      PartnerStatus?
+  toStatus        PartnerStatus
+  byUserId        String?
+  reason          String?        @db.Text
+  createdAt       DateTime       @default(now())
+
+  talentProfile TalentProfile @relation(fields: [talentProfileId], references: [id], onDelete: Cascade)
+  byUser        User?         @relation("StatusEventActor", fields: [byUserId], references: [id], onDelete: SetNull)
+
+  @@index([talentProfileId, createdAt])
+}
+
+model Engagement {
+  talentProfileId String
+  projectId       String
+  role            String
+  startedAt       DateTime? @db.Date
+  completedAt     DateTime? @db.Date
+
+  talentProfile TalentProfile @relation(fields: [talentProfileId], references: [id], onDelete: Cascade)
+  project       Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([talentProfileId, projectId])
+  @@index([projectId])
+}
+
+model JobSkill {
+  jobId   String
+  skillId String
+
+  job   Job   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([jobId, skillId])
+}
+
+model Proposal {
+  id           String         @id @default(cuid())
+  jobId        String
+  talentId     String
+  coverLetter  String         @db.Text
+  bidAmount    Decimal        @db.Decimal(12, 2)
+  deliveryDays Int
+  status       ProposalStatus @default(SUBMITTED)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  job      Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  talent   User      @relation(fields: [talentId], references: [id], onDelete: Cascade)
+  contract Contract?
+
+  @@unique([jobId, talentId])
+  @@index([jobId, status])
+}
+
+model Contract {
+  id         String         @id @default(cuid())
+  jobId      String
+  proposalId String         @unique
+  clientId   String
+  talentId   String
+  title      String
+  amount     Decimal        @db.Decimal(12, 2)
+  status     ContractStatus @default(PENDING_ACCEPTANCE)
+  startsAt   DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  job      Job      @relation(fields: [jobId], references: [id])
+  proposal Proposal @relation(fields: [proposalId], references: [id])
+  client     User        @relation("ContractClient", fields: [clientId], references: [id])
+  talent     User        @relation("ContractTalent", fields: [talentId], references: [id])
+  milestones        Milestone[]
+  activities        ContractActivity[]
+  deliverables      Deliverable[]
+  review            Review?
+  messageThreads    MessageThread[]
+  paymentTransactions PaymentTransaction[]
+
+  @@index([clientId])
+  @@index([talentId])
+  @@index([status])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  contractId String   @unique
+  reviewerId String
+  revieweeId String
+  rating     Int
+  comment    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  reviewer User     @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee User     @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
+
+  @@index([revieweeId, createdAt])
+}
+
+model Milestone {
+  id          String          @id @default(cuid())
+  contractId  String
+  title       String
+  description String?         @db.Text
+  amount      Decimal         @db.Decimal(12, 2)
+  status      MilestoneStatus @default(PENDING)
+  sortOrder   Int             @default(0)
+  dueDate                 DateTime?
+  stripePaymentIntentId String?         @unique
+  stripeTransferId      String?
+  fundedAt                DateTime?
+  paidAt                  DateTime?
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+
+  contract            Contract             @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  deliverables        Deliverable[]
+  paymentTransactions PaymentTransaction[]
+
+  @@index([contractId])
+}
+
+model Deliverable {
+  id          String   @id @default(cuid())
+  milestoneId String
+  contractId  String
+  uploadedBy  String
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  contract  Contract  @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  uploader  User      @relation(fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([milestoneId])
+  @@index([contractId])
+}
+
+model ContractActivity {
+  id         String       @id @default(cuid())
+  contractId String
+  actorId    String?
+  type       ActivityType
+  title      String
+  body       String?      @db.Text
+  createdAt  DateTime     @default(now())
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  actor    User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([contractId, createdAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String           @db.Text
+  href      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+}
+
+model MessageThread {
+  id         String   @id @default(cuid())
+  jobId      String
+  clientId   String
+  talentId   String
+  contractId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  job         Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  contract    Contract?    @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  messages    Message[]
+  threadReads ThreadRead[]
+
+  @@unique([jobId, talentId])
+  @@index([jobId])
+  @@index([contractId])
+}
+
+model ThreadRead {
+  id         String   @id @default(cuid())
+  threadId   String
+  userId     String
+  lastReadAt DateTime @default(now())
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([threadId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  threadId  String
+  senderId  String
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([threadId])
+}
+
+model PaymentTransaction {
+  id                    String                   @id @default(cuid())
+  contractId            String
+  milestoneId           String?
+  payerId               String
+  payeeId               String
+  type                  PaymentTransactionType
+  status                PaymentTransactionStatus @default(SUCCEEDED)
+  amount                Decimal                  @db.Decimal(12, 2)
+  platformFee           Decimal?                 @db.Decimal(12, 2)
+  netAmount             Decimal?                 @db.Decimal(12, 2)
+  currency              String                   @default("gbp")
+  stripePaymentIntentId String?
+  stripeTransferId      String?
+  receiptUrl            String?
+  createdAt             DateTime                 @default(now())
+
+  contract  Contract   @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  payer     User       @relation("PaymentsPayer", fields: [payerId], references: [id], onDelete: Cascade)
+  payee     User       @relation("PaymentsPayee", fields: [payeeId], references: [id], onDelete: Cascade)
+
+  @@index([contractId, createdAt])
+  @@index([payerId])
+  @@index([payeeId])
+}
+
+model WaitlistEntry {
+  id         String    @id @default(cuid())
+  email      String    @unique
+  role       UserRole?
+  postcode   String?
+  categoryId String?
+  createdAt  DateTime  @default(now())
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([postcode])
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  label     String
+  filters   Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
