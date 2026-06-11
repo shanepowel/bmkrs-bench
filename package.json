@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "postinstall": "npm run db:generate",
-    "dev": "npm run dev -w bench-web",
-    "build": "npm run build -w bench-web",
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
     "db:generate": "npm run db:generate -w @bench/database",
     "db:push": "npm run db:push -w @bench/database",
     "db:migrate": "npm run db:migrate -w @bench/database",
