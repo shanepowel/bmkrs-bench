@@ -2,5 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "cd ../.. && npm install",
-  "buildCommand": "cd ../.. && npm run db:migrate:deploy && npm run build"
+  "buildCommand": "cd ../.. && DATABASE_URL=\"$POSTGRES_URL_NON_POOLING\" npm run db:migrate:deploy && npm run build"
 }
