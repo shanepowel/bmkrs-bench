@@ -21,6 +21,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/health",
   "/api/webhooks(.*)",
   "/api/login",
+  "/api/bench-public",
+  "/api/hire",
 ]);
 
 function benchDevMiddleware(req: NextRequest) {
@@ -31,6 +33,7 @@ function benchDevMiddleware(req: NextRequest) {
     pathname.startsWith("/apply") ||
     pathname.startsWith("/join") ||
     pathname.startsWith("/login") ||
+    pathname.startsWith("/sign-in") ||
     pathname.startsWith("/auth/callback") ||
     pathname.startsWith("/partners/") ||
     pathname.startsWith("/api/") ||

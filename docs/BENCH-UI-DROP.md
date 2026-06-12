@@ -9,7 +9,11 @@ see also: [AUTH-DROP.md](./AUTH-DROP.md) for dev sign-in and `/home`.
 | drop file | bench location | notes |
 |---|---|---|
 | `bench-ui.tsx` | `src/lib/bench-ui.tsx` | tokens, Status dot, NavRail, StageStrip, forms, buttons |
-| `page.tsx` | `src/app/page.tsx` | public home; signed-in redirect to `/home` (dev) or role home (clerk) |
+| `page.tsx` | `src/app/page.tsx` | two-door home: ink hero, live bench slice, weekly pulse, dual how-it-works; signed-in → `/home` |
+| `hire/page.tsx` | `src/app/hire/page.tsx` | hirer landing: vetting + enquiry form |
+| `api/bench-public` | `src/app/api/bench-public/route.ts` | anonymised public slice (prisma + seed fallback); hourly revalidate |
+| `api/hire` | `src/app/api/hire/route.ts` | hire enquiry stub (insert + notify TODO) |
+| `join/page.tsx` | `src/app/join/page.tsx` | redirect to `/apply` (query params preserved) |
 | `apply/page.tsx` | `src/app/apply/page.tsx` | intake form → sign-up applicant; draft in sessionStorage |
 | `login/page.tsx` | `src/app/login/page.tsx` | ink magic-link ui; dev mode signs in instantly via `/api/login` |
 | `bench/page.tsx` | `src/app/studio/bench/page.tsx` | studio bench table with live prisma data |

@@ -39,7 +39,9 @@ rotate every key. never share a database with the public marketplace.
 |---|---|
 | `/login` | member sign-in → `/home` |
 | `/join` | redirects to `/apply` → sign-up → `/application` |
-| `/hire` | company landing → www contact or `/login` |
+| `/hire` | hirer landing — vetting mechanics + enquiry form → `/api/hire` |
+
+Set `APP_URL` (or `NEXT_PUBLIC_APP_URL`) in production so the home page server fetch to `/api/bench-public` resolves on Vercel.
 
 See [docs/AUTH-DROP.md](docs/AUTH-DROP.md) and [AGENTS.md](AGENTS.md).
 

@@ -26,7 +26,7 @@ export default async function SignUpPage({
 
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4 py-12">
-      <SignUp forceRedirectUrl={onboardingUrl} signInForceRedirectUrl="/dashboard" />
+      <SignUp forceRedirectUrl={onboardingUrl} signInForceRedirectUrl="/home" />
     </div>
   );
 }

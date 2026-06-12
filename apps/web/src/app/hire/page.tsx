@@ -1,106 +1,247 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { BenchEntryNav } from "@/components/bench-entry-nav";
-import { C, Kicker, mono, PrimaryButton } from "@/lib/bench-ui";
+import {
+  C,
+  mono,
+  Kicker,
+  Label,
+  TextField,
+  TextArea,
+  PillSelect,
+  PrimaryButton,
+} from "@/lib/bench-ui";
 import { marketingUrls } from "@/lib/marketing-urls";
 import { routes } from "@/lib/routes";
 
-export const metadata: Metadata = {
-  title: "find talent | bmkrs.",
-  description:
-    "bring senior bmkrs people into your team — brand, voice, product and delivery, on tap, with no recruitment ramp-up.",
-  robots: { index: false, follow: false },
-};
+const DISCIPLINES = [
+  "brand + identity",
+  "voice + copy",
+  "pr + comms",
+  "product design",
+  "engineering",
+  "motion + 3d",
+  "growth",
+  "not sure yet",
+];
 
-const STEPS = [
+const VETTING = [
   {
     n: "01",
-    t: "tell us what you need.",
-    b: "a short conversation about the work, the team shape, and how embedded you want the bench to be.",
+    t: "references, actually checked.",
+    b: "two per partner, contacted by us, before anyone reaches the bench.",
   },
   {
     n: "02",
-    t: "we staff from the bench.",
-    b: "the same senior people who deliver bmkrs client work — vetted, known, and already working in our voice.",
+    t: "trials, always paid.",
+    b: "where we want proof beyond the portfolio, we commission a short paid brief. how someone works on a real job is the only test that counts.",
   },
   {
     n: "03",
-    t: "they plug into your team.",
-    b: "brand, voice, pr, product, engineering — agreed capacity, rolling terms, no lock-in theatre.",
+    t: "track records, not star ratings.",
+    b: "every partner's profile carries their completed bmkrs projects: what, when, what role. history you can ask us about, not scores anyone can game.",
+  },
+  {
+    n: "04",
+    t: "matched by a human.",
+    b: "you do not search a directory. you tell us the gap, and someone who knows the bench personally puts the right person in front of you.",
   },
 ];
 
-export default function HireLandingPage() {
+export default function HirePage() {
+  const [disciplines, setDisciplines] = useState<string[]>([]);
+  const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setState("sending");
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
+    try {
+      const res = await fetch("/api/hire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, disciplines }),
+      });
+      setState(res.ok ? "done" : "error");
+    } catch {
+      setState("error");
+    }
+  }
+
   return (
-    <main style={{ background: C.paper, color: C.paperText }} className="min-h-dvh">
-      <div className="mx-auto max-w-[720px] px-6 py-20">
-        <BenchEntryNav context="hire" />
-
-        <Kicker>for companies</Kicker>
-        <h1
-          className="font-medium"
-          style={{ fontSize: "clamp(2.25rem,5vw,3.75rem)", lineHeight: 1.0, letterSpacing: "-0.02em" }}
-        >
-          find talent from the bench.
-        </h1>
-        <p style={{ color: C.paperBody }} className="mt-5 max-w-[60ch] text-[15px] leading-relaxed">
-          need more than a project? bring senior bmkrs people in to build alongside your team. brand,
-          voice, pr, product, on tap — with no recruitment and no ramp-up. the same people who do our
-          client work, working as part of yours.
-        </p>
-
-        <div className="mt-9 flex flex-wrap items-center gap-4">
-          <PrimaryButton href={marketingUrls.contactHire}>let&apos;s talk ↗</PrimaryButton>
+    <main>
+      <section style={{ background: C.ink, color: C.inkText }}>
+        <div className="mx-auto max-w-[1120px] px-6 pb-16 pt-16 md:px-10">
           <Link
-            href={routes.login}
-            className="inline-block rounded-full border px-6 py-3 text-[14px] font-medium"
-            style={{ borderColor: "rgba(24,22,19,0.3)", color: C.paperText }}
+            href={routes.home}
+            style={{ ...mono, color: C.inkFaint }}
+            className="text-[12px] underline-offset-4 hover:underline"
           >
-            already a client? log in
+            ← the bench
           </Link>
+          <div className="mt-10">
+            <Kicker surface="ink">hire from the bench</Kicker>
+            <h1
+              className="max-w-[16ch] font-medium"
+              style={{ fontSize: "clamp(2.5rem,5.5vw,5rem)", lineHeight: 0.98, letterSpacing: "-0.02em" }}
+            >
+              the right person, vouched for properly.
+            </h1>
+            <p style={{ color: C.inkBody }} className="mt-6 max-w-[60ch] text-lg leading-relaxed">
+              the bench is the small network of partners we staff bmkrs projects from, and it is open
+              to teams who need the same calibre. every person on it has been vetted by us, has a
+              visible track record, and is matched to your gap by a human who knows them.
+            </p>
+          </div>
         </div>
+      </section>
 
-        <section className="mt-16">
-          <Kicker>how it works</Kicker>
-          <div className="mt-8 space-y-8">
-            {STEPS.map((s) => (
-              <div key={s.n} className="pt-5" style={{ borderTop: `1px solid ${C.paperRule}` }}>
-                <p style={{ ...mono, color: C.orange }} className="mb-2 text-[12px]">
-                  {s.n}
+      <section style={{ background: C.paper, color: C.paperText }}>
+        <div className="mx-auto max-w-[1120px] px-6 py-16 md:px-10">
+          <Kicker>what trusted means here</Kicker>
+          <h2
+            className="font-medium"
+            style={{ fontSize: "clamp(1.75rem,3.2vw,2.75rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
+          >
+            &quot;vetted&quot; is a process, not an adjective.
+          </h2>
+          <div className="mt-10 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {VETTING.map((v) => (
+              <div
+                key={v.n}
+                className="pt-4"
+                style={{ borderTop: "1px solid rgba(24,22,19,0.15)" }}
+              >
+                <p style={{ ...mono, color: C.orange }} className="mb-1.5 text-[12px]">
+                  {v.n}
                 </p>
-                <h2 className="mb-2 text-xl font-medium">{s.t}</h2>
-                <p style={{ color: C.paperBody }} className="max-w-[55ch] text-[15px] leading-relaxed">
-                  {s.b}
+                <h3 className="mb-1.5 text-lg font-medium">{v.t}</h3>
+                <p style={{ color: C.paperBody }} className="max-w-[50ch] text-[14px] leading-relaxed">
+                  {v.b}
                 </p>
               </div>
             ))}
           </div>
-        </section>
-
-        <section
-          className="mt-16 rounded-md p-6"
-          style={{ border: `1px solid ${C.paperRule}`, background: "rgba(24,22,19,0.02)" }}
-        >
-          <p style={{ ...mono, color: C.paperFaint }} className="mb-2 text-[11px] uppercase tracking-[0.08em]">
-            motion embedded
+          <p style={{ ...mono, color: C.paperFaint }} className="mt-8 text-[12px]">
+            rates: each partner has a day rate band; you see the exact rate with the match, before
+            any commitment. our coordination fee is included in the rate you are quoted. no
+            surprises after.
           </p>
-          <p style={{ color: C.paperBody }} className="text-[15px] leading-relaxed">
-            already a motion client? the network is what powers{" "}
-            <a href={marketingUrls.motion} className="underline underline-offset-4">
-              motion embedded
-            </a>
-            : the same bench, whether we run the work or you do.
-          </p>
-        </section>
+        </div>
+      </section>
 
-        <p style={{ ...mono, color: C.paperFaint }} className="mt-12 text-[12px]">
-          looking to join as a specialist?{" "}
-          <Link href={routes.join} className="underline underline-offset-4" style={{ color: C.paperBody }}>
-            apply to the bench
-          </Link>
-          . this is not a job board — we only staff people we would stake our name on.
-        </p>
-      </div>
+      <section style={{ background: C.ink }}>
+        <div className="mx-auto max-w-[1120px] px-6 py-16 md:px-10">
+          <div
+            className="mx-auto max-w-[720px] rounded-2xl p-8 md:p-10"
+            style={{ background: C.paper, color: C.paperText }}
+          >
+            {state === "done" ? (
+              <>
+                <Kicker>got it</Kicker>
+                <h2
+                  className="font-medium"
+                  style={{ fontSize: "clamp(1.75rem,3vw,2.5rem)", letterSpacing: "-0.02em" }}
+                >
+                  a human is on it.
+                </h2>
+                <p style={{ color: C.paperBody }} className="mt-4 max-w-[50ch] text-[15px] leading-relaxed">
+                  you will hear within one working day with either a match, a question, or an honest
+                  &quot;we do not have that person right now&quot;.
+                </p>
+              </>
+            ) : (
+              <>
+                <Kicker>tell us the gap</Kicker>
+                <h2
+                  className="font-medium"
+                  style={{ fontSize: "clamp(1.75rem,3vw,2.5rem)", letterSpacing: "-0.02em" }}
+                >
+                  a paragraph is plenty.
+                </h2>
+                <form onSubmit={submit} className="mt-8 space-y-6">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div>
+                      <Label>name</Label>
+                      <TextField name="name" required autoComplete="name" />
+                    </div>
+                    <div>
+                      <Label>email</Label>
+                      <TextField name="email" type="email" required autoComplete="email" />
+                    </div>
+                  </div>
+                  <div>
+                    <Label>company / studio</Label>
+                    <TextField name="company" />
+                  </div>
+                  <div>
+                    <Label>discipline you need</Label>
+                    <PillSelect options={DISCIPLINES} value={disciplines} onChange={setDisciplines} />
+                  </div>
+                  <div>
+                    <Label>the gap (dates, shape of the work, anything useful)</Label>
+                    <TextArea
+                      name="need"
+                      required
+                      placeholder="e.g. we need a motion designer for 3 weeks from mid july to bring a brand launch to life..."
+                    />
+                  </div>
+                  <div className="flex items-center gap-5">
+                    <PrimaryButton type="submit">
+                      {state === "sending" ? "sending…" : "find me the person"}
+                    </PrimaryButton>
+                    {state === "error" && (
+                      <p style={{ ...mono, color: C.paperBody }} className="text-[12px]">
+                        that didn&apos;t send. nothing lost, try again.
+                      </p>
+                    )}
+                  </div>
+                  <p style={{ ...mono, color: C.paperFaint }} className="text-[11px]">
+                    handled per the{" "}
+                    <a
+                      href={`${marketingUrls.studio}/legal/privacy`}
+                      className="underline underline-offset-4"
+                    >
+                      privacy notice
+                    </a>
+                    . no obligation until you say yes to a named person and a rate.
+                  </p>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ background: C.ink, borderTop: `1px solid ${C.inkRule}` }}>
+        <Link href={routes.home} className="group block">
+          <div className="mx-auto flex max-w-[1120px] items-end justify-between gap-8 px-6 py-10 md:px-10">
+            <div>
+              <p style={{ ...mono, color: C.orange, letterSpacing: "0.08em" }} className="mb-2 text-[12px]">
+                next
+              </p>
+              <p
+                className="font-medium transition-transform group-hover:translate-x-2 motion-reduce:transform-none"
+                style={{
+                  color: C.inkText,
+                  fontSize: "clamp(1.25rem,2.5vw,2rem)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                see the bench, live →
+              </p>
+            </div>
+            <span
+              aria-hidden
+              style={{ color: C.orange }}
+              className="text-3xl transition-transform group-hover:translate-x-2 motion-reduce:transform-none"
+            >
+              →
+            </span>
+          </div>
+        </Link>
+      </section>
     </main>
   );
 }

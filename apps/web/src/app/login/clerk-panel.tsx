@@ -22,7 +22,13 @@ export function ClerkLoginPanel() {
         <p style={{ ...mono, color: C.inkFaint }} className="mb-8 text-[12px]">
           partners, clients and studio — sign in to the bench.
         </p>
-        <SignIn routing="path" path={routes.login} signUpUrl={routes.signUp()} />
+        <SignIn
+          routing="path"
+          path={routes.login}
+          signUpUrl={routes.signUp()}
+          forceRedirectUrl={routes.dashboardHome}
+          fallbackRedirectUrl={routes.dashboardHome}
+        />
       </div>
     </main>
   );
