@@ -108,7 +108,7 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
-.bench-ticker > div {
+.bench-ticker {
   animation: bench-ticker 36s linear infinite;
 }
 
@@ -122,7 +122,7 @@ input:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bench-ticker > div {
+  .bench-ticker {
     animation: none;
   }
 }
