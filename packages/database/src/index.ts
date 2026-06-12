@@ -1,19 +1,20 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import type { PoolConfig } from "pg";
 import { PrismaClient } from "../generated/client";
-import { DATABASE_URL_ENV_KEYS, resolveDatabaseUrl } from "./database-url";
+import {
+  DATABASE_URL_ENV_KEYS,
+  isLocalPostgresHost,
+  resolveDatabaseUrl,
+} from "./database-url";
 
 export {
   DATABASE_URL_ENV_KEYS,
   isDatabaseUrlConfigured,
+  isLocalPostgresHost,
   listConfiguredDatabaseEnvKeys,
   resolveDatabaseEnvKey,
   resolveDatabaseUrl,
 } from "./database-url";
-
-function isLocalPostgresHost(hostname: string): boolean {
-  return hostname === "localhost" || hostname === "127.0.0.1";
-}
 
 function normalizeDatabaseUrl(raw: string): string {
   try {

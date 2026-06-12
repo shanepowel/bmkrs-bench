@@ -18,6 +18,21 @@ export const DATABASE_URL_ENV_KEYS = [
 
 const PLACEHOLDER_HOSTS = new Set(["127.0.0.1", "localhost", "placeholder"]);
 
+export function isLocalPostgresHost(hostname: string): boolean {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
+/** node-pg merges connectionString over PoolConfig.ssl — remote Neon URLs need sslmode=no-verify. */
+function normalizeSslInUrl(url: URL): void {
+  if (isLocalPostgresHost(url.hostname)) return;
+  if (process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === "true") return;
+
+  url.searchParams.delete("sslrootcert");
+  url.searchParams.delete("sslcert");
+  url.searchParams.delete("sslkey");
+  url.searchParams.set("sslmode", "no-verify");
+}
+
 function isPlaceholderUrl(raw: string): boolean {
   const v = raw.trim();
   if (!v || v.includes("placeholder@") || v.includes("user:password@")) return true;
@@ -97,6 +112,7 @@ export function resolveDatabaseUrl(): string | undefined {
       url.searchParams.set("pgbouncer", "true");
     }
     url.searchParams.delete("channel_binding");
+    normalizeSslInUrl(url);
     return url.toString().replace(/^postgres:/, "postgresql:");
   } catch {
     return raw;
