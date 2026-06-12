@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { EntryChrome } from "@/components/entry-chrome";
 import { C, mono, Kicker, PrimaryButton, Status, type StatusKind } from "@/lib/bench-ui";
 import { getCurrentUser } from "@/lib/auth";
 import { homeForRole } from "@/lib/bench";
@@ -92,30 +93,10 @@ export default async function HomePage() {
   const bench = await getBench();
 
   return (
-    <main>
+    <EntryChrome>
+      <main>
       <section style={{ background: C.ink, color: C.inkText }}>
         <div className="mx-auto max-w-[1120px] px-6 pb-16 pt-16 md:px-10">
-          <div className="mb-14 flex items-center justify-between">
-            <span className="text-xl font-medium">
-              bmkrs
-              <span
-                aria-hidden
-                className="ml-[2px] inline-block h-[0.13em] w-[0.13em] rounded-full align-baseline"
-                style={{ background: C.orange }}
-              />
-              <span style={{ ...mono, color: C.inkFaint }} className="ml-3 text-[12px]">
-                the bench
-              </span>
-            </span>
-            <Link
-              href={routes.login}
-              style={{ ...mono, color: C.inkBody }}
-              className="text-[13px] underline-offset-4 hover:underline"
-            >
-              sign in →
-            </Link>
-          </div>
-
           <Kicker surface="ink">the bmkrs partner network</Kicker>
           <h1
             className="max-w-[16ch] font-medium"
@@ -381,5 +362,6 @@ export default async function HomePage() {
         </div>
       </section>
     </main>
+    </EntryChrome>
   );
 }

@@ -73,13 +73,6 @@ export default function HirePage() {
     <main>
       <section style={{ background: C.ink, color: C.inkText }}>
         <div className="mx-auto max-w-[1120px] px-6 pb-16 pt-16 md:px-10">
-          <Link
-            href={routes.home}
-            style={{ ...mono, color: C.inkFaint }}
-            className="text-[12px] underline-offset-4 hover:underline"
-          >
-            ← the bench
-          </Link>
           <div className="mt-10">
             <Kicker surface="ink">hire from the bench</Kicker>
             <h1

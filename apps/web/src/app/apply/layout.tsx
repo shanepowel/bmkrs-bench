@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EntryChrome } from "@/components/entry-chrome";
 
 export const metadata: Metadata = {
   title: "apply to the bench | bmkrs.",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ApplyLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <EntryChrome>{children}</EntryChrome>;
 }

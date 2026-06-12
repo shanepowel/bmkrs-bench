@@ -4,9 +4,12 @@ const studioBase = process.env.NEXT_PUBLIC_BMKRS_STUDIO_URL?.trim() ?? "https://
 
 export const marketingUrls = {
   studio: studioBase,
+  work: `${studioBase}/work`,
+  services: `${studioBase}/services`,
+  motion: `${studioBase}/motion`,
   network: `${studioBase}/network`,
+  journal: `${studioBase}/journal`,
+  about: `${studioBase}/about`,
   contact: `${studioBase}/contact`,
   contactHire: `${studioBase}/contact?reason=hire`,
-  motion: `${studioBase}/motion`,
-  services: `${studioBase}/services`,
 } as const;

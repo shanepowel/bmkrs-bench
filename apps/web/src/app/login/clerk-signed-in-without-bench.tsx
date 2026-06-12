@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
-import { BenchEntryNavInk } from "@/components/bench-entry-nav";
 import { C, Kicker, mono } from "@/lib/bench-ui";
 import { routes } from "@/lib/routes";
 
@@ -11,7 +10,6 @@ export function ClerkSignedInWithoutBench() {
   return (
     <main style={{ background: C.ink, color: C.inkText }} className="min-h-dvh px-6 py-16">
       <div className="mx-auto w-full max-w-[460px]">
-        <BenchEntryNavInk context="login" />
         <Kicker surface="ink">member login</Kicker>
         <h1
           className="mt-4 font-medium"

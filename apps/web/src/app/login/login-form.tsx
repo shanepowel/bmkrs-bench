@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { BenchEntryNavInk } from "@/components/bench-entry-nav";
 import { C, mono, Kicker, PrimaryButton } from "@/lib/bench-ui";
 
 export function LoginForm() {
@@ -31,7 +30,6 @@ export function LoginForm() {
   return (
     <main style={{ background: C.ink, color: C.inkText }} className="grid min-h-dvh place-items-center px-6">
       <div className="w-full max-w-[460px]">
-        <BenchEntryNavInk context="login" />
         <p className="mb-6 text-4xl font-medium" style={{ letterSpacing: "-0.02em" }}>
           bmkrs
           <span

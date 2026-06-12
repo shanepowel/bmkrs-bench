@@ -1,7 +1,6 @@
 "use client";
 
 import { SignIn } from "@clerk/nextjs";
-import { BenchEntryNavInk } from "@/components/bench-entry-nav";
 import { C, Kicker, mono } from "@/lib/bench-ui";
 import { routes } from "@/lib/routes";
 
@@ -9,7 +8,6 @@ export function ClerkLoginPanel() {
   return (
     <main style={{ background: C.ink, color: C.inkText }} className="min-h-dvh px-6 py-16">
       <div className="mx-auto w-full max-w-[460px]">
-        <BenchEntryNavInk context="login" />
         <p className="mb-6 text-4xl font-medium" style={{ letterSpacing: "-0.02em" }}>
           bmkrs
           <span
