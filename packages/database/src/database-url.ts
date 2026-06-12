@@ -88,6 +88,29 @@ export function resolveDatabaseEnvKey(): string | undefined {
   return scanEnvForDatabaseUrl()?.key;
 }
 
+/** Prefer non-pooled URLs for Prisma migrate deploy (Supabase/Neon poolers hang on DDL). */
+const DIRECT_DATABASE_URL_ENV_KEYS = [
+  "POSTGRES_URL_NON_POOLING",
+  "DATABASE_URL_UNPOOLED",
+  "DIRECT_URL",
+] as const;
+
+export function resolveDirectDatabaseUrl(): string | undefined {
+  for (const key of DIRECT_DATABASE_URL_ENV_KEYS) {
+    const value = process.env[key]?.trim();
+    if (value && looksLikePostgresUrl(value) && !isPlaceholderUrl(value)) {
+      try {
+        const url = new URL(value.replace(/^postgresql:/, "postgres:"));
+        normalizeSslInUrl(url);
+        return url.toString().replace(/^postgres:/, "postgresql:");
+      } catch {
+        return value;
+      }
+    }
+  }
+  return undefined;
+}
+
 export function firstDatabaseEnvValue(): string | undefined {
   for (const key of DATABASE_URL_ENV_KEYS) {
     const value = process.env[key]?.trim();

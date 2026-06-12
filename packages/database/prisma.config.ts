@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadEnv } from "dotenv";
 import { defineConfig } from "prisma/config";
-import { resolveDatabaseUrl } from "./src/database-url";
+import { resolveDatabaseUrl, resolveDirectDatabaseUrl } from "./src/database-url";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -18,6 +18,8 @@ const databaseUrl =
   resolveDatabaseUrl() ??
   "postgresql://placeholder:placeholder@127.0.0.1:5432/placeholder?schema=public";
 
+const directDatabaseUrl = resolveDirectDatabaseUrl();
+
 export default defineConfig({
   schema: path.join(root, "prisma/schema.prisma"),
   migrations: {
@@ -25,5 +27,6 @@ export default defineConfig({
   },
   datasource: {
     url: databaseUrl,
+    ...(directDatabaseUrl ? { directUrl: directDatabaseUrl } : {}),
   },
 });
