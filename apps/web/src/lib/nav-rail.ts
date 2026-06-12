@@ -12,14 +12,12 @@ export const studioNavItems: NavRailItem[] = [
 export const partnerNavItems: NavRailItem[] = [
   { label: "home", href: routes.partner },
   { label: "profile", href: routes.profile },
-  { label: "briefs", href: routes.jobs },
   { label: "threads", href: routes.threads },
 ];
 
 export const clientNavItems: NavRailItem[] = [
   { label: "projects", href: routes.client },
   { label: "threads", href: routes.threads },
-  { label: "contracts", href: routes.dashboard },
 ];
 
 export function navRailFooter(firstName: string, role: "studio" | "partner" | "client") {

@@ -4,6 +4,7 @@ export const routes = {
   home: "/",
   login: "/login",
   dashboardHome: "/home",
+  afterSignIn: "/auth/after-sign-in",
   authCallback: "/auth/callback",
   join: "/join",
   apply: "/apply",

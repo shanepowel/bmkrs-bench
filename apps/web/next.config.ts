@@ -18,10 +18,21 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/dashboard", destination: "/home", permanent: false },
+      { source: "/about", destination: "/", permanent: true },
+      { source: "/how-it-works", destination: "/", permanent: true },
+      { source: "/jobs", destination: "/studio/briefs", permanent: false },
+      { source: "/jobs/:path*", destination: "/studio/briefs", permanent: false },
+      { source: "/talents", destination: "/studio/bench", permanent: false },
+      { source: "/talents/:path*", destination: "/studio/bench", permanent: false },
+      { source: "/categories", destination: "/studio/bench", permanent: false },
+      { source: "/categories/:path*", destination: "/studio/bench", permanent: false },
+      { source: "/freelancers/:username", destination: "/partners/:username", permanent: true },
+      { source: "/hire/:skill", destination: "/hire", permanent: false },
       {
         source: "/jobs/:slug/chat/:participantId",
-        destination: "/jobs/:slug/messages/:participantId",
-        permanent: true,
+        destination: "/studio/briefs",
+        permanent: false,
       },
     ];
   },

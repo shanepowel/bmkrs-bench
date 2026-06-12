@@ -26,8 +26,8 @@ export function ClerkLoginPanel() {
           routing="path"
           path={routes.login}
           signUpUrl={routes.signUp()}
-          forceRedirectUrl={routes.dashboardHome}
-          fallbackRedirectUrl={routes.dashboardHome}
+          forceRedirectUrl={routes.afterSignIn}
+          fallbackRedirectUrl={routes.afterSignIn}
         />
       </div>
     </main>

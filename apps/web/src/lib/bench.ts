@@ -42,6 +42,6 @@ export function homeForRole(role: UserRole): string {
     case UserRole.ADMIN:
       return "/studio";
     default:
-      return "/dashboard";
+      return "/home";
   }
 }

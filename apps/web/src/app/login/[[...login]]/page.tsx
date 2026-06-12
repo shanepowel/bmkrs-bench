@@ -5,9 +5,9 @@ import { getAuthSession, getCurrentUser, syncUserFromClerk } from "@/lib/auth";
 import { homeForRole } from "@/lib/bench";
 import { isBenchDevAuth, isClerkConfigured } from "@/lib/env";
 import { routes } from "@/lib/routes";
-import { ClerkLoginPanel } from "./clerk-panel";
-import { ClerkSignedInWithoutBench } from "./clerk-signed-in-without-bench";
-import { LoginForm } from "./login-form";
+import { ClerkLoginPanel } from "../clerk-panel";
+import { ClerkSignedInWithoutBench } from "../clerk-signed-in-without-bench";
+import { LoginForm } from "../login-form";
 
 export const metadata: Metadata = {
   title: "log in | bmkrs.",

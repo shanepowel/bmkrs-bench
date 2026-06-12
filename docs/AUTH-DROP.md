@@ -45,7 +45,7 @@ sign out via the link on `/home` (posts to `/api/logout`).
 
 ## production
 
-set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` on vercel. clerk middleware protects routes; `/sign-in` replaces `/login`.
+set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` on vercel. clerk middleware protects routes; **`/login`** is canonical (`/sign-in` redirects here). after sign-in, users land on `/auth/after-sign-in` → role home.
 
 ## supabase mode (scaffold)
 

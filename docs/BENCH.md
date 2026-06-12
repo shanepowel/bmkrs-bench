@@ -1,6 +1,6 @@
 # the bench — product spec
 
-working name: **the bench**. builder-coded, lowercase. network@bmkrs.com's product.
+working name: **the bench**. builder-coded, lowercase. <network@bmkrs.com>'s product.
 
 ## mapping
 

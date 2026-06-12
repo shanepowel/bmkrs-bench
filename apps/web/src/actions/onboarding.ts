@@ -55,7 +55,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
   });
 
   if (isDevAuthBypass()) {
-    redirect("/dashboard");
+    redirect(homeForRole(dbRole));
   }
 
   const { userId } = await auth();

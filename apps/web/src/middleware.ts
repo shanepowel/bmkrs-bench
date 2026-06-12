@@ -15,6 +15,7 @@ const isPublicRoute = createRouteMatcher([
   "/join(.*)",
   "/hire",
   "/login(.*)",
+  "/auth/after-sign-in",
   "/auth/callback(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
@@ -34,6 +35,7 @@ function benchDevMiddleware(req: NextRequest) {
     pathname.startsWith("/join") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/auth/after-sign-in") ||
     pathname.startsWith("/auth/callback") ||
     pathname.startsWith("/partners/") ||
     pathname.startsWith("/api/") ||

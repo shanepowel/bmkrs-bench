@@ -2,7 +2,7 @@
 
 the bmkrs trusted partner portal. the studio's vetted bench of collaborators: partners assigned to client projects, clients meeting the team through it.
 
-**product:** the bench · **agency:** bmkrs · **target:** `bench.bmkrs.com`
+**product:** the bench · **agency:** bmkrs · **target:** `app.bmkrs.com`
 
 forked from the freelance near me marketplace codebase. same auth (clerk), same core mechanics (profiles, applications, skills, threads, contracts). different trust model and visibility.
 
