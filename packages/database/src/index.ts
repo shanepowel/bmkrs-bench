@@ -11,11 +11,15 @@ export {
   resolveDatabaseUrl,
 } from "./database-url";
 
+function isLocalPostgresHost(hostname: string): boolean {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 function normalizeDatabaseUrl(raw: string): string {
   try {
     const url = new URL(raw.replace(/^postgresql:/, "postgres:"));
     const isLocalPostgres =
-      (url.hostname === "localhost" || url.hostname === "127.0.0.1") &&
+      isLocalPostgresHost(url.hostname) &&
       (url.port === "5432" || url.port === "");
     // pgbouncer=true is for Prisma dev / Neon pooler — not plain Docker Postgres
     if (isLocalPostgres && url.searchParams.get("pgbouncer") === "true") {
@@ -38,8 +42,9 @@ function poolConfig(): PoolConfig {
   const connectionString = normalizeDatabaseUrl(raw);
   const url = new URL(connectionString.replace(/^postgresql:/, "postgres:"));
   const usesPooler = url.searchParams.get("pgbouncer") === "true";
+  const isLocal = isLocalPostgresHost(url.hostname);
 
-  return {
+  const config: PoolConfig = {
     connectionString,
     // Prisma v7 pg defaults idleTimeout to 10s — too aggressive for Next.js dev
     idleTimeoutMillis: 300_000,
@@ -47,6 +52,17 @@ function poolConfig(): PoolConfig {
     keepAlive: true,
     max: usesPooler ? 5 : 10,
   };
+
+  // Prisma 7 @prisma/adapter-pg uses node-pg with stricter TLS than the old Rust engine.
+  // Neon on Vercel (POSTGRES_PRISMA_URL) otherwise fails: self-signed certificate in chain.
+  if (!isLocal) {
+    config.ssl =
+      process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === "true"
+        ? { rejectUnauthorized: true }
+        : { rejectUnauthorized: false };
+  }
+
+  return config;
 }
 
 function createPrismaClient(): PrismaClient {

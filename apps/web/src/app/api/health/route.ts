@@ -24,7 +24,7 @@ export async function GET() {
   return NextResponse.json(
     {
       ok,
-      app: "freelancenearme-web",
+      app: "bmkrs-bench",
       database,
       databaseEnv: dbDiag.activeKey ?? null,
       databaseKeysFound: dbDiag.keysFound,
