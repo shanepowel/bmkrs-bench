@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MILESTONE_STATUS_LABEL } from "@/lib/labels";
-import { isStripeConfigured } from "@/lib/stripe";
+import { isPaymentsEnabled } from "@/lib/stripe";
 import { formatMoney } from "@/lib/format";
 import { routes } from "@/lib/routes";
 
@@ -34,18 +34,28 @@ export function MilestonePanel({
   contractActive: boolean;
   talentPayoutsReady: boolean;
 }) {
-  const stripeOn = isStripeConfigured();
+  const paymentsOn = isPaymentsEnabled();
 
   return (
     <section>
       <h2 className="text-lg font-semibold text-slate-900">Milestones</h2>
       <p className="mt-1 text-sm text-slate-600">
-        {stripeOn
+        {paymentsOn
           ? `Fund via Stripe Checkout. Platform fee: ${process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT ?? "10"}%.`
-          : "Add STRIPE_SECRET_KEY to enable live payments."}
+          : "Partners invoice off-platform. Milestone funding through Stripe is retired on the bench."}
       </p>
 
-      {!talentPayoutsReady && contractActive && (
+      {!paymentsOn && contractActive && (
+        <p className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
+          Coordinate payment terms in the project thread. See{" "}
+          <a href={routes.transactions} className="font-semibold underline">
+            transactions
+          </a>{" "}
+          for details.
+        </p>
+      )}
+
+      {paymentsOn && !talentPayoutsReady && contractActive && (
         <p className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
           Talent must{" "}
           <a href={routes.payouts} className="font-semibold underline">
@@ -73,9 +83,9 @@ export function MilestonePanel({
                   </div>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {isClient && m.status === MilestoneStatus.PENDING && contractActive && (
+                  {isClient && m.status === MilestoneStatus.PENDING && contractActive && paymentsOn && (
                     <form action={createMilestoneCheckout.bind(null, m.id)}>
-                      <Button type="submit" disabled={!talentPayoutsReady || !stripeOn}>
+                      <Button type="submit" disabled={!talentPayoutsReady}>
                         Fund milestone
                       </Button>
                     </form>

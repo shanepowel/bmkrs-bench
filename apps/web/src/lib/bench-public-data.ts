@@ -19,10 +19,16 @@ export type BenchPublicPulse = {
   line: string;
 };
 
+export type BenchPublicTeamMember = {
+  name: string;
+  discipline: string;
+};
+
 export type BenchPublicSlice = {
   rows: BenchPublicRow[];
   totals: { partners: number; disciplines: number };
   pulse: BenchPublicPulse | null;
+  coreTeam: BenchPublicTeamMember[];
 };
 
 const SEED_SLICE: BenchPublicSlice = {
@@ -68,6 +74,7 @@ const SEED_SLICE: BenchPublicSlice = {
     updated: "this week",
     line: "2 briefs out · 1 trial running · 3 applications being read by a human",
   },
+  coreTeam: [],
 };
 
 function formatDiscipline(name: string): string {
@@ -194,8 +201,33 @@ export async function getBenchPublicSlice(): Promise<BenchPublicSlice> {
         disciplines: disciplineSlugs.size || rows.length,
       },
       pulse: buildPulse(pulseParts),
+      coreTeam: await getCoreTeamMembers(),
     };
   } catch {
     return SEED_SLICE;
   }
+}
+
+async function getCoreTeamMembers(): Promise<BenchPublicTeamMember[]> {
+  const core = await prisma.talentProfile.findMany({
+    where: { partnerStatus: PartnerStatus.CORE },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      skills: {
+        include: { skill: { include: { category: true } } },
+        orderBy: { skill: { sortOrder: "asc" } },
+        take: 1,
+      },
+    },
+    orderBy: { user: { firstName: "asc" } },
+  });
+
+  return core.map((partner) => {
+    const primary = partner.skills[0]?.skill;
+    const discipline = primary
+      ? formatDiscipline(primary.category?.name ?? primary.name)
+      : "general";
+    const name = [partner.user.firstName, partner.user.lastName].filter(Boolean).join(" ").trim();
+    return { name: name || "partner", discipline };
+  });
 }

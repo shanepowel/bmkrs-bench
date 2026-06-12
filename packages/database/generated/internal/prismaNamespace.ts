@@ -408,7 +408,8 @@ export const ModelName = {
   Message: 'Message',
   PaymentTransaction: 'PaymentTransaction',
   WaitlistEntry: 'WaitlistEntry',
-  SavedSearch: 'SavedSearch'
+  SavedSearch: 'SavedSearch',
+  HireEnquiry: 'HireEnquiry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "category" | "clientProfile" | "talentProfile" | "portfolioItem" | "skill" | "talentSkill" | "project" | "job" | "partnerStatusEvent" | "engagement" | "jobSkill" | "proposal" | "contract" | "review" | "milestone" | "deliverable" | "contractActivity" | "notification" | "messageThread" | "threadRead" | "message" | "paymentTransaction" | "waitlistEntry" | "savedSearch"
+    modelProps: "user" | "category" | "clientProfile" | "talentProfile" | "portfolioItem" | "skill" | "talentSkill" | "project" | "job" | "partnerStatusEvent" | "engagement" | "jobSkill" | "proposal" | "contract" | "review" | "milestone" | "deliverable" | "contractActivity" | "notification" | "messageThread" | "threadRead" | "message" | "paymentTransaction" | "waitlistEntry" | "savedSearch" | "hireEnquiry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2278,6 +2279,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HireEnquiry: {
+      payload: Prisma.$HireEnquiryPayload<ExtArgs>
+      fields: Prisma.HireEnquiryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HireEnquiryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HireEnquiryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        findFirst: {
+          args: Prisma.HireEnquiryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HireEnquiryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        findMany: {
+          args: Prisma.HireEnquiryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>[]
+        }
+        create: {
+          args: Prisma.HireEnquiryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        createMany: {
+          args: Prisma.HireEnquiryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HireEnquiryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>[]
+        }
+        delete: {
+          args: Prisma.HireEnquiryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        update: {
+          args: Prisma.HireEnquiryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        deleteMany: {
+          args: Prisma.HireEnquiryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HireEnquiryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HireEnquiryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>[]
+        }
+        upsert: {
+          args: Prisma.HireEnquiryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HireEnquiryPayload>
+        }
+        aggregate: {
+          args: Prisma.HireEnquiryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHireEnquiry>
+        }
+        groupBy: {
+          args: Prisma.HireEnquiryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HireEnquiryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HireEnquiryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HireEnquiryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2681,6 +2756,20 @@ export const SavedSearchScalarFieldEnum = {
 } as const
 
 export type SavedSearchScalarFieldEnum = (typeof SavedSearchScalarFieldEnum)[keyof typeof SavedSearchScalarFieldEnum]
+
+
+export const HireEnquiryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  company: 'company',
+  disciplines: 'disciplines',
+  need: 'need',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HireEnquiryScalarFieldEnum = (typeof HireEnquiryScalarFieldEnum)[keyof typeof HireEnquiryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3150,6 +3239,7 @@ export type GlobalOmitConfig = {
   paymentTransaction?: Prisma.PaymentTransactionOmit
   waitlistEntry?: Prisma.WaitlistEntryOmit
   savedSearch?: Prisma.SavedSearchOmit
+  hireEnquiry?: Prisma.HireEnquiryOmit
 }
 
 /* Types for Logging */

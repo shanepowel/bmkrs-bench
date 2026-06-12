@@ -13,9 +13,13 @@ import { logContractActivity } from "@/lib/contract-activity";
 import { pushNotification } from "@/lib/in-app-notify";
 import { notifyMilestoneFunded } from "@/lib/notifications";
 import { formatMoney } from "@/lib/utils";
-import { getStripe } from "@/lib/stripe";
+import { getStripe, isPaymentsEnabled } from "@/lib/stripe";
 
 export async function POST(req: Request) {
+  if (!isPaymentsEnabled()) {
+    return NextResponse.json({ ok: true, skipped: "payments disabled" });
+  }
+
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "STRIPE_WEBHOOK_SECRET not configured" }, { status: 500 });

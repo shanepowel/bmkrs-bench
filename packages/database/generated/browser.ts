@@ -142,3 +142,8 @@ export type WaitlistEntry = Prisma.WaitlistEntryModel
  * 
  */
 export type SavedSearch = Prisma.SavedSearchModel
+/**
+ * Model HireEnquiry
+ * 
+ */
+export type HireEnquiry = Prisma.HireEnquiryModel

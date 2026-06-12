@@ -13,7 +13,7 @@ import { requireUser } from "@/lib/auth";
 import {
   appUrl,
   getStripe,
-  isStripeConfigured,
+  isPaymentsEnabled,
   platformFeePercent,
   toCents,
 } from "@/lib/stripe";
@@ -26,7 +26,7 @@ import { recordPaymentTransaction } from "@/lib/payment-ledger";
 import { revalidatePath } from "next/cache";
 
 export async function createMilestoneCheckout(milestoneId: string): Promise<void> {
-  if (!isStripeConfigured()) throw new Error("Stripe is not configured");
+  if (!isPaymentsEnabled()) throw new Error("In-platform payments are disabled");
 
   const user = await requireUser();
   const milestone = await prisma.milestone.findUnique({
@@ -113,7 +113,7 @@ export async function releaseMilestonePayment(milestoneId: string): Promise<void
     throw new Error("Milestone must be approved before release");
   }
 
-  if (!isStripeConfigured()) {
+  if (!isPaymentsEnabled()) {
     await prisma.milestone.update({
       where: { id: milestoneId },
       data: { status: MilestoneStatus.PAID, paidAt: new Date() },

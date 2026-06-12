@@ -6,12 +6,10 @@ import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 
 const navItems = [
-  { href: routes.dashboard, label: "Dashboard" },
-  { href: routes.inbox, label: "Inbox" },
-  { href: routes.jobs, label: "Jobs" },
-  { href: routes.notifications, label: "Notifications" },
-  { href: routes.transactions, label: "Transactions" },
+  { href: routes.dashboardHome, label: "Home" },
+  { href: routes.threads, label: "Threads" },
   { href: routes.profile, label: "Profile" },
+  { href: routes.transactions, label: "Payments" },
 ];
 
 export function AppNav() {
@@ -25,10 +23,9 @@ export function AppNav() {
       {navItems.map((item) => {
         const active =
           pathname === item.href ||
-          (item.href === routes.dashboard && pathname.startsWith("/contracts")) ||
-          (item.href === routes.inbox && pathname.startsWith("/inbox")) ||
-          (item.href === routes.transactions && pathname.startsWith("/settings/transactions")) ||
-          (item.href === routes.jobs && pathname.startsWith("/jobs/post"));
+          (item.href === routes.dashboardHome && pathname === "/home") ||
+          (item.href === routes.threads && pathname.startsWith("/threads")) ||
+          (item.href === routes.transactions && pathname.startsWith("/settings/"));
         return (
           <Link
             key={item.href}

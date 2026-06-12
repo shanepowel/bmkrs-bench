@@ -75,7 +75,8 @@ export const ModelName = {
   Message: 'Message',
   PaymentTransaction: 'PaymentTransaction',
   WaitlistEntry: 'WaitlistEntry',
-  SavedSearch: 'SavedSearch'
+  SavedSearch: 'SavedSearch',
+  HireEnquiry: 'HireEnquiry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -458,6 +459,20 @@ export const SavedSearchScalarFieldEnum = {
 } as const
 
 export type SavedSearchScalarFieldEnum = (typeof SavedSearchScalarFieldEnum)[keyof typeof SavedSearchScalarFieldEnum]
+
+
+export const HireEnquiryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  company: 'company',
+  disciplines: 'disciplines',
+  need: 'need',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HireEnquiryScalarFieldEnum = (typeof HireEnquiryScalarFieldEnum)[keyof typeof HireEnquiryScalarFieldEnum]
 
 
 export const SortOrder = {

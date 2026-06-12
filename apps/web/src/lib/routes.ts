@@ -32,7 +32,7 @@ export const routes = {
   freelancer: (username: string) => `/freelancers/${username}`,
   partnerProfile: (username: string) => `/partners/${username}`,
 
-  dashboard: "/dashboard",
+  dashboard: "/home",
   threads: "/threads",
   threadsThread: (threadId: string) => `/threads/${threadId}`,
   inbox: "/threads",

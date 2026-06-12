@@ -580,3 +580,17 @@ model SavedSearch {
 
   @@index([userId])
 }
+
+model HireEnquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  company     String?
+  disciplines Json
+  need        String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+}
