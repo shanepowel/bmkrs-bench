@@ -57,4 +57,4 @@ npm run db:push && npm run db:seed   # .env files are gitignored — recreate ea
 
 **Auth gotcha (redirect loop).** With Clerk unconfigured (the local default), do **not** set `DEV_AUTH_BYPASS=true`: the login page honours the bypass and redirects to `/home`, but `/home`'s `requireUser()` uses the cookie-based bench session and bounces back to `/login` — an infinite loop. Set `DEV_AUTH_BYPASS=false` and use the email-link cookie login at `/login`. Any email works in dev; the role is inferred from the address (`client…`→client, `partner…`→partner, `studio…`/`shane…`→studio). Seeded users: `client@demo.bmkrs.com`, `partner@demo.bmkrs.com`.
 
-**Lint.** `next lint` was removed in Next 16, so the repo `lint` script is broken and there is no ESLint config in `apps/web`; type-safety is covered by `npm run build`. Dev server runs on port **3001**.
+**Lint.** `next lint` was removed in Next 16, so `apps/web` uses a flat ESLint config (`apps/web/eslint.config.mjs`) and the `lint` script runs `eslint .`. Run with `npm run lint -w web`. Dev server runs on port **3001**.
