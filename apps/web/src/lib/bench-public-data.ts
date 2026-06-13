@@ -8,10 +8,12 @@ import {
 
 export type BenchPublicRow = {
   discipline: string;
+  specialism: string;
   status: "trusted" | "core";
   availability: "available" | "booked" | "away";
   note: string;
   projects: number;
+  group: "brand" | "motion" | "build" | "voice" | "growth";
 };
 
 export type BenchPublicPulse = {
@@ -35,50 +37,92 @@ const SEED_SLICE: BenchPublicSlice = {
   rows: [
     {
       discipline: "motion + 3d",
-      status: "trusted",
-      availability: "available",
-      note: "available",
-      projects: 3,
-    },
-    {
-      discipline: "voice + copy",
-      status: "core",
-      availability: "booked",
-      note: "booked until jul",
-      projects: 11,
-    },
-    {
-      discipline: "brand + identity",
-      status: "core",
-      availability: "available",
-      note: "available",
-      projects: 8,
-    },
-    {
-      discipline: "engineering",
-      status: "trusted",
-      availability: "available",
-      note: "available",
-      projects: 2,
-    },
-    {
-      discipline: "product design",
+      specialism: "brand films, launch",
       status: "core",
       availability: "available",
       note: "available",
       projects: 9,
+      group: "motion",
+    },
+    {
+      discipline: "voice + copy",
+      specialism: "naming, messaging",
+      status: "trusted",
+      availability: "booked",
+      note: "booked until jul",
+      projects: 11,
+      group: "voice",
+    },
+    {
+      discipline: "brand + identity",
+      specialism: "identity systems",
+      status: "trusted",
+      availability: "available",
+      note: "available",
+      projects: 6,
+      group: "brand",
+    },
+    {
+      discipline: "engineering",
+      specialism: "next, supabase",
+      status: "trusted",
+      availability: "available",
+      note: "available",
+      projects: 2,
+      group: "build",
+    },
+    {
+      discipline: "product design",
+      specialism: "web, app, growth",
+      status: "core",
+      availability: "available",
+      note: "available",
+      projects: 8,
+      group: "build",
+    },
+    {
+      discipline: "pr + comms",
+      specialism: "launches, profile",
+      status: "trusted",
+      availability: "available",
+      note: "available",
+      projects: 4,
+      group: "growth",
+    },
+    {
+      discipline: "growth",
+      specialism: "paid, lifecycle",
+      status: "trusted",
+      availability: "booked",
+      note: "booked until aug",
+      projects: 3,
+      group: "growth",
     },
   ],
   totals: { partners: 7, disciplines: 8 },
   pulse: {
     updated: "this week",
-    line: "2 briefs out · 1 trial running · 3 applications being read by a human",
+    line: "2 briefs out, 1 trial running",
   },
   coreTeam: [],
 };
 
 function formatDiscipline(name: string): string {
   return name.toLowerCase().replace(/\s+/g, " ");
+}
+
+function formatSpecialism(skills: { skill: { name: string } }[]): string {
+  const names = skills.slice(0, 2).map((entry) => formatDiscipline(entry.skill.name));
+  return names.join(", ") || "generalist";
+}
+
+function mapGroup(categorySlug?: string | null): BenchPublicRow["group"] {
+  const slug = (categorySlug ?? "").toLowerCase();
+  if (slug.includes("brand") || slug.includes("identity")) return "brand";
+  if (slug.includes("motion") || slug.includes("3d")) return "motion";
+  if (slug.includes("voice") || slug.includes("copy")) return "voice";
+  if (slug.includes("growth") || slug.includes("pr") || slug.includes("comms")) return "growth";
+  return "build";
 }
 
 function mapAvailability(raw: string | null | undefined): {
@@ -139,6 +183,8 @@ export async function getBenchPublicSlice(): Promise<BenchPublicSlice> {
       const discipline = primary
         ? formatDiscipline(primary.category?.name ?? primary.name)
         : "general";
+      const specialism = formatSpecialism(partner.skills);
+      const group = mapGroup(primary?.category?.slug);
       const status =
         partner.partnerStatus === PartnerStatus.CORE ? "core" : ("trusted" as const);
       const { availability, note } = mapAvailability(partner.availability);
@@ -146,16 +192,26 @@ export async function getBenchPublicSlice(): Promise<BenchPublicSlice> {
 
       const existing = byDiscipline.get(discipline);
       if (!existing) {
-        byDiscipline.set(discipline, { discipline, status, availability, note, projects });
+        byDiscipline.set(discipline, {
+          discipline,
+          specialism,
+          status,
+          availability,
+          note,
+          projects,
+          group,
+        });
         continue;
       }
 
       byDiscipline.set(discipline, {
         discipline,
+        specialism: existing.specialism,
         status: mergeStatus(existing.status, partner.partnerStatus),
         availability: mergeAvailability(existing.availability, availability),
         note: mergeAvailability(existing.availability, availability) === "available" ? "available" : existing.note,
         projects: existing.projects + projects,
+        group: existing.group,
       });
     }
 
