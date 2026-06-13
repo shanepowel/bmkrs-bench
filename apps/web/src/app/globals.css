@@ -283,6 +283,11 @@ input:focus-visible {
   align-self: flex-start;
 }
 
+.mobile-nav-panel {
+  background: #181613;
+  color: #f1efe8;
+}
+
 @media (max-width: 760px) {
   .site-nav {
     display: none;
