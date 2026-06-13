@@ -7,7 +7,7 @@
     "dev": "next dev --port 3001",
     "build": "npm run db:generate -w @bench/database && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@bench/database": "*",

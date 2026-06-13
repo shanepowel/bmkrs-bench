@@ -140,7 +140,7 @@ export async function ensureUser() {
   if (isDevAuthBypass()) {
     return prisma.user.findFirst({ where: { clerkId: "seed_client_1" } });
   }
-  let user = await syncUserFromClerk();
+  const user = await syncUserFromClerk();
   if (!user) return null;
   const needsOnboarding = !user.username || user.firstName === "User";
   return { user, needsOnboarding };
