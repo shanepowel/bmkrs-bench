@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { marketingUrls } from "@/lib/marketing-urls";
 import { routes } from "@/lib/routes";
@@ -21,11 +21,15 @@ const mono = { fontFamily: "var(--font-mono, ui-monospace, monospace)" } as cons
 
 export default function SiteHeader({ active }: { active?: string }) {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Client-only mount flag for the portal (createPortal needs document.body).
+  // useSyncExternalStore yields the server snapshot (false) during SSR and the
+  // first client render, then the client snapshot (true) after hydration —
+  // without a setState-in-effect (react-hooks/set-state-in-effect).
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     if (!open) return;
