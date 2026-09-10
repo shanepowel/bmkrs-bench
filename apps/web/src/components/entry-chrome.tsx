@@ -1,9 +1,15 @@
-import { MarketingSiteHeader } from "@/components/layout/marketing-site-header";
+import SiteHeader from "@/components/SiteHeader";
 
-export function EntryChrome({ children }: { children: React.ReactNode }) {
+export function EntryChrome({
+  children,
+  active,
+}: {
+  children: React.ReactNode;
+  active?: string;
+}) {
   return (
     <>
-      <MarketingSiteHeader />
+      <SiteHeader active={active} />
       {children}
     </>
   );
