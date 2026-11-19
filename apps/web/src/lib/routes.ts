@@ -18,13 +18,15 @@ export const routes = {
   studioPipelineApplicant: (id: string) => `/studio/pipeline/${id}`,
   studioBench: "/studio/bench",
   studioBriefs: "/studio/briefs",
+  studioBrief: (slug: string) => `/studio/briefs/${slug}`,
 
   // retained marketplace mechanics (studio-only or role-gated)
-  jobs: "/jobs",
-  job: (slug: string) => `/jobs/${slug}`,
-  jobEdit: (slug: string) => `/jobs/${slug}/edit`,
-  jobMessages: (slug: string, participantId: string) => `/jobs/${slug}/messages/${participantId}`,
-  postJob: "/jobs/post",
+  jobs: "/studio/briefs",
+  /** Canonical brief detail — formerly marketplace `/jobs/:slug`. */
+  job: (slug: string) => `/studio/briefs/${slug}`,
+  jobEdit: (slug: string) => `/studio/briefs/${slug}`,
+  jobMessages: (slug: string, _participantId?: string) => `/studio/briefs/${slug}`,
+  postJob: "/studio/briefs",
   talents: "/talents",
   categories: "/categories",
   category: (slug: string) => `/categories/${slug}`,

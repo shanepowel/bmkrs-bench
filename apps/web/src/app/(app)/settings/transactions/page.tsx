@@ -1,17 +1,18 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/routes";
 
 export default function TransactionsPage() {
   return (
-    <div className="max-w-lg">
-      <h2 className="text-xl font-semibold text-slate-900">transactions</h2>
-      <p className="mt-3 text-sm leading-relaxed text-slate-600">
-        in-platform milestone payments are retired on the bench. partners invoice off-platform;
-        the studio keeps project records in threads and contracts.
+    <div className="max-w-lg space-y-4">
+      <h2 className="text-lg font-medium">transactions</h2>
+      <p className="text-[15px] leading-relaxed text-muted-foreground">
+        in-platform milestone payments are retired on the bench. partners invoice off-platform; the
+        studio keeps project records in threads.
       </p>
-      <Link href={routes.threads} className="mt-6 inline-block text-sm font-medium text-slate-900 underline">
-        open threads
-      </Link>
+      <Button asChild variant="outline">
+        <Link href={routes.threads}>open threads</Link>
+      </Button>
     </div>
   );
 }

@@ -12,7 +12,9 @@ see also: [AUTH-DROP.md](./AUTH-DROP.md) for dev sign-in and `/home`.
 | `page.tsx` | `src/app/page.tsx` | two-door home: ink hero, live bench slice, weekly pulse, dual how-it-works; signed-in → `/home` |
 | `hire/page.tsx` | `src/app/hire/page.tsx` | hirer landing: vetting + enquiry form |
 | `api/bench-public` | `src/app/api/bench-public/route.ts` | anonymised public slice (prisma + seed fallback); hourly revalidate |
-| `api/hire` | `src/app/api/hire/route.ts` | hire enquiry stub (insert + notify TODO) |
+| `api/hire` | `src/app/api/hire/route.ts` | hire enquiry (insert + email notify) |
+| shadcn ui | `src/components/ui/*` + `components.json` | brand-tokened radix-nova primitives (button, field, dialog, sonner, …) |
+| brief detail | `src/app/studio/briefs/[slug]/page.tsx` | studio brief workspace after create / list |
 | `join/page.tsx` | `src/app/join/page.tsx` | redirect to `/apply` (query params preserved) |
 | `apply/page.tsx` | `src/app/apply/page.tsx` | intake form → sign-up applicant; draft in sessionStorage |
 | `login/page.tsx` | `src/app/login/page.tsx` | ink magic-link ui; dev mode signs in instantly via `/api/login` |

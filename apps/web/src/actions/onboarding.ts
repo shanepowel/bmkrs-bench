@@ -19,7 +19,7 @@ const schema = z.object({
   city: z.string().optional(),
   postcode: z.string().optional(),
   headline: z.string().optional(),
-  hourlyRate: z.coerce.number().optional(),
+  dayRateBand: z.string().optional(),
   companyName: z.string().optional(),
 });
 
@@ -33,7 +33,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
     city: formData.get("city") || undefined,
     postcode: formData.get("postcode") || undefined,
     headline: formData.get("headline") || undefined,
-    hourlyRate: formData.get("hourlyRate") || undefined,
+    dayRateBand: formData.get("dayRateBand") || undefined,
     companyName: formData.get("companyName") || undefined,
   });
 
@@ -86,7 +86,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
             talentProfile: {
               create: {
                 headline: data.headline,
-                hourlyRate: data.hourlyRate,
+                dayRateBand: data.dayRateBand,
                 partnerStatus:
                   dbRole === UserRole.APPLICANT ? PartnerStatus.APPLIED : PartnerStatus.REVIEWED,
               },
@@ -111,17 +111,20 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
     publicMetadata: { role: dbRole },
   });
 
-  if ((dbRole === UserRole.TALENT || dbRole === UserRole.APPLICANT) && data.headline) {
+  if (
+    (dbRole === UserRole.TALENT || dbRole === UserRole.APPLICANT) &&
+    (data.headline || data.dayRateBand)
+  ) {
     await prisma.talentProfile.upsert({
       where: { userId: user.id },
       create: {
         userId: user.id,
         headline: data.headline,
-        hourlyRate: data.hourlyRate,
+        dayRateBand: data.dayRateBand,
         partnerStatus:
           dbRole === UserRole.APPLICANT ? PartnerStatus.APPLIED : PartnerStatus.REVIEWED,
       },
-      update: { headline: data.headline, hourlyRate: data.hourlyRate },
+      update: { headline: data.headline, dayRateBand: data.dayRateBand },
     });
   }
 
