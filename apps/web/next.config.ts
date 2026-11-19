@@ -24,18 +24,24 @@ const nextConfig: NextConfig = {
       { source: "/about", destination: "/", permanent: true },
       { source: "/how-it-works", destination: "/", permanent: true },
       { source: "/jobs", destination: "/studio/briefs", permanent: false },
-      { source: "/jobs/:path*", destination: "/studio/briefs", permanent: false },
+      {
+        source: "/jobs/:slug/messages/:participantId",
+        destination: "/studio/briefs/:slug",
+        permanent: false,
+      },
+      {
+        source: "/jobs/:slug/chat/:participantId",
+        destination: "/studio/briefs/:slug",
+        permanent: false,
+      },
+      { source: "/jobs/:slug/edit", destination: "/studio/briefs/:slug", permanent: false },
+      { source: "/jobs/:slug", destination: "/studio/briefs/:slug", permanent: false },
       { source: "/talents", destination: "/studio/bench", permanent: false },
       { source: "/talents/:path*", destination: "/studio/bench", permanent: false },
       { source: "/categories", destination: "/studio/bench", permanent: false },
       { source: "/categories/:path*", destination: "/studio/bench", permanent: false },
       { source: "/freelancers/:username", destination: "/partners/:username", permanent: true },
       { source: "/hire/:skill", destination: "/hire", permanent: false },
-      {
-        source: "/jobs/:slug/chat/:participantId",
-        destination: "/studio/briefs",
-        permanent: false,
-      },
     ];
   },
 };

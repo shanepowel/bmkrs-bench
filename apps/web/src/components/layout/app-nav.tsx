@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 
 const navItems = [
-  { href: routes.dashboardHome, label: "Home" },
-  { href: routes.threads, label: "Threads" },
-  { href: routes.profile, label: "Profile" },
-  { href: routes.transactions, label: "Payments" },
+  { href: routes.dashboardHome, label: "home" },
+  { href: routes.threads, label: "threads" },
+  { href: routes.profile, label: "profile" },
+  { href: routes.transactions, label: "payments" },
 ];
 
 export function AppNav() {
@@ -18,7 +18,7 @@ export function AppNav() {
   return (
     <nav
       aria-label="Account"
-      className="mb-8 flex gap-1 overflow-x-auto border-b border-slate-200 pb-px"
+      className="mb-8 flex gap-1 overflow-x-auto border-b border-border pb-px"
     >
       {navItems.map((item) => {
         const active =
@@ -31,10 +31,10 @@ export function AppNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition",
+              "shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium lowercase transition",
               active
-                ? "border-blue-600 text-blue-700"
-                : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                ? "border-orange text-foreground"
+                : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
             )}
           >
             {item.label}

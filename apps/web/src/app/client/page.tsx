@@ -33,8 +33,8 @@ export default async function ClientPage() {
 
       {team.length === 0 ? (
         <p className="py-6 text-[15px]" style={{ color: C.paperFaint, borderTop: `1px solid ${C.paperRule}` }}>
-          your team appears here when the studio staffs your project. threads and deliverables stay on
-          existing contract routes.
+          your team appears here when the studio staffs your project. use project threads for day-to-day
+          coordination.
         </p>
       ) : (
         team.map((member) => (
@@ -60,11 +60,11 @@ export default async function ClientPage() {
 
       <div className="mt-6">
         <Link
-          href={routes.dashboard}
+          href={routes.threads}
           className="inline-block rounded-full border px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.03] active:scale-[0.98] motion-reduce:transform-none"
           style={{ borderColor: "rgba(24,22,19,0.3)", color: C.paperText, background: "transparent" }}
         >
-          contracts dashboard
+          open project threads
         </Link>
       </div>
     </BenchAppShell>

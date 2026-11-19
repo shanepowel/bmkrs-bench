@@ -1,6 +1,6 @@
 import { addPortfolioItem, deletePortfolioItem, listMyPortfolio } from "@/actions/portfolio";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Field } from "@/components/ui/form-field";
 
 export async function PortfolioPanel() {
   const items = await listMyPortfolio();

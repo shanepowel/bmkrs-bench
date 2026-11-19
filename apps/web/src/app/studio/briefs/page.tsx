@@ -46,7 +46,7 @@ export default async function StudioBriefsPage() {
           briefs.map((brief) => (
             <Link
               key={brief.id}
-              href={routes.job(brief.slug)}
+              href={routes.studioBrief(brief.slug)}
               className="grid grid-cols-[1.4fr_0.8fr_0.8fr] items-center py-3 transition-transform hover:translate-x-1 motion-reduce:transform-none"
               style={{ borderTop: `1px solid ${C.paperRule}` }}
             >

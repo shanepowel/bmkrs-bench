@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Fragment_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import { getClerkPublishableKey, isClerkConfigured } from "@/lib/env-clerk";
 import "./globals.css";
 
@@ -24,7 +25,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const publishableKey = getClerkPublishableKey();
   const hasClerk = isClerkConfigured();
 
-  const inner = <div className="flex min-h-screen flex-col">{children}</div>;
+  const inner = (
+    <>
+      <div className="flex min-h-screen flex-col">{children}</div>
+      <Toaster position="bottom-right" richColors closeButton />
+    </>
+  );
 
   return (
     <html lang="en-GB" className={fragmentMono.variable}>

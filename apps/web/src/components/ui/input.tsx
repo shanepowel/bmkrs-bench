@@ -1,40 +1,34 @@
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import { Textarea } from "@/components/ui/textarea"
 
-export function inputClassName(className?: string) {
-  return cn(
-    "w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900",
-    "placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-    className
-  );
-}
-
-export function Input({
-  className,
-  ...props
-}: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={inputClassName(className)} {...props} />;
-}
-
-export function Textarea({
-  className,
-  ...props
-}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
-    <textarea
-      className={cn(inputClassName(), "resize-y min-h-[5rem]", className)}
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "h-10 w-full min-w-0 rounded-lg border border-input bg-card px-3.5 py-2.5 text-[15px] transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
+        className
+      )}
       {...props}
     />
-  );
+  )
 }
 
-export function Select({
-  className,
-  children,
-  ...props
-}: React.SelectHTMLAttributes<HTMLSelectElement>) {
+function Select({ className, children, ...props }: React.ComponentProps<"select">) {
   return (
-    <select className={inputClassName(className)} {...props}>
+    <select
+      data-slot="native-select"
+      className={cn(
+        "h-10 w-full min-w-0 rounded-lg border border-input bg-card px-3.5 text-[15px] text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50",
+        className
+      )}
+      {...props}
+    >
       {children}
     </select>
-  );
+  )
 }
+
+export { Input, Textarea, Select }

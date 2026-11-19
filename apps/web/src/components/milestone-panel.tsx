@@ -1,7 +1,7 @@
 import { MilestoneStatus } from "@bench/database";
 import { createMilestone, updateMilestoneStatus } from "@/actions/milestones";
 import { createMilestoneCheckout } from "@/actions/payments";
-import { Field } from "@/components/ui/field";
+import { Field } from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";

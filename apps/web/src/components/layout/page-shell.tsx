@@ -27,7 +27,7 @@ export function PageShell({
   children,
 }: PageShellProps) {
   return (
-    <div className={cn("mx-auto px-4 py-10 md:py-12", widths[width])}>
+    <div className={cn("mx-auto bg-paper px-4 py-10 text-foreground md:py-12", widths[width])}>
       {back && (
         <div className="mb-6">
           <BackLink href={back.href}>{back.label}</BackLink>
@@ -35,8 +35,8 @@ export function PageShell({
       )}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl tracking-tight text-slate-900 md:text-4xl">{title}</h1>
-          {description && <p className="mt-2 text-slate-600">{description}</p>}
+          <h1 className="text-h3 font-medium tracking-tight text-foreground">{title}</h1>
+          {description && <p className="mt-2 text-[15px] text-muted-foreground">{description}</p>}
         </div>
         {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
       </div>

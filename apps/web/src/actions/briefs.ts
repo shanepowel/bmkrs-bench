@@ -87,6 +87,36 @@ export async function listStudioBriefs() {
   });
 }
 
+export async function getStudioBrief(slug: string) {
+  await requireStudio();
+
+  // Match listStudioBriefs: any studio member can open any invited brief.
+  const brief = await prisma.job.findFirst({
+    where: {
+      slug,
+      visibility: BriefVisibility.INVITED,
+    },
+    include: {
+      proposals: {
+        include: {
+          talent: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+            },
+          },
+        },
+        orderBy: { updatedAt: "desc" },
+      },
+      skills: { include: { skill: true } },
+    },
+  });
+
+  return brief;
+}
+
 export async function respondToBrief(formData: FormData) {
   const user = await requireRole(UserRole.TALENT);
   const jobId = String(formData.get("jobId") ?? "");
@@ -129,6 +159,7 @@ export async function respondToBrief(formData: FormData) {
   revalidatePath(routes.partner);
   revalidatePath(routes.dashboardHome);
   revalidatePath(routes.studioBriefs);
+  revalidatePath(routes.studioBrief(proposal.job.slug));
   return { success: true };
 }
 
@@ -196,6 +227,7 @@ export async function createStudioBrief(formData: FormData) {
   });
 
   revalidatePath(routes.studioBriefs);
+  revalidatePath(routes.studioBrief(job.slug));
   revalidatePath(routes.partner);
-  redirect(routes.job(job.slug));
+  redirect(routes.studioBrief(job.slug));
 }

@@ -1,5 +1,9 @@
 @import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -90,10 +94,6 @@
 
 .mt-tight {
   margin-top: var(--space-tight);
-}
-
-body {
-  @apply bg-ink font-sans text-paper antialiased;
 }
 
 ::selection {
@@ -299,5 +299,131 @@ input:focus-visible {
 
   .site-bench-nav {
     display: none;
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* shadcn semantic tokens mapped to brand kit (paper surface for app chrome) */
+:root {
+  --background: #f1efe8;
+  --foreground: #181613;
+  --card: #ffffff;
+  --card-foreground: #181613;
+  --popover: #ffffff;
+  --popover-foreground: #181613;
+  --primary: #ff4d00;
+  --primary-foreground: #181613;
+  --secondary: #181613;
+  --secondary-foreground: #f1efe8;
+  --muted: #e8e5dc;
+  --muted-foreground: #5f5e5a;
+  --accent: #ff4d00;
+  --accent-foreground: #181613;
+  --destructive: #b42318;
+  --border: rgba(24, 22, 19, 0.15);
+  --input: rgba(24, 22, 19, 0.2);
+  --ring: #ff4d00;
+  --chart-1: #ff4d00;
+  --chart-2: #444441;
+  --chart-3: #5f5e5a;
+  --chart-4: #b4b2a9;
+  --chart-5: #181613;
+  --radius: 0.5rem;
+  --sidebar: #f1efe8;
+  --sidebar-foreground: #181613;
+  --sidebar-primary: #ff4d00;
+  --sidebar-primary-foreground: #181613;
+  --sidebar-accent: #e8e5dc;
+  --sidebar-accent-foreground: #181613;
+  --sidebar-border: rgba(24, 22, 19, 0.15);
+  --sidebar-ring: #ff4d00;
+}
+
+.dark {
+  --background: #181613;
+  --foreground: #f1efe8;
+  --card: #24211c;
+  --card-foreground: #f1efe8;
+  --popover: #24211c;
+  --popover-foreground: #f1efe8;
+  --primary: #ff4d00;
+  --primary-foreground: #181613;
+  --secondary: #f1efe8;
+  --secondary-foreground: #181613;
+  --muted: #2c2924;
+  --muted-foreground: #b4b2a9;
+  --accent: #ff4d00;
+  --accent-foreground: #181613;
+  --destructive: #f97066;
+  --border: rgba(241, 239, 232, 0.16);
+  --input: rgba(241, 239, 232, 0.2);
+  --ring: #ff4d00;
+  --chart-1: #ff4d00;
+  --chart-2: #d3d1c7;
+  --chart-3: #b4b2a9;
+  --chart-4: #888780;
+  --chart-5: #f1efe8;
+  --sidebar: #181613;
+  --sidebar-foreground: #f1efe8;
+  --sidebar-primary: #ff4d00;
+  --sidebar-primary-foreground: #181613;
+  --sidebar-accent: #2c2924;
+  --sidebar-accent-foreground: #f1efe8;
+  --sidebar-border: rgba(241, 239, 232, 0.16);
+  --sidebar-ring: #ff4d00;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Keep marketing ink canvas; do not let shadcn paper tokens paint the document root. */
+  body {
+    @apply bg-ink font-sans text-paper antialiased;
   }
 }

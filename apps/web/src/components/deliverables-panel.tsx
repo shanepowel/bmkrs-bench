@@ -1,6 +1,6 @@
 import { MilestoneStatus } from "@bench/database";
 import { uploadDeliverable } from "@/actions/deliverables";
-import { Field } from "@/components/ui/field";
+import { Field } from "@/components/ui/form-field";
 import { formatFileSize, isBlobConfigured } from "@/lib/blob";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
